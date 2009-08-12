@@ -276,7 +276,8 @@ else if (isset($_GET['place']))
 			//sti til XSL
 			$xsl_url = '../xsl/bokliste.xsl';
 			//sti til XML med CCL som param
-			$xml_url = "../kilder/marcxml_uns.php?ccl=$ccl";
+			// TODO: Dette burde vært gjort på en annen måte! Så lenge dette er hardkodet blir det umulig å flytte på skriptet...
+			$xml_url = "http://torfeus.deich.folkebibl.no/~magnus/reiseplanlegger/kilder/marcxml_uns.php?ccl=$ccl";
 
 			//oppretter DOM-dok med XML-data
 			$xml = new DOMDocument;
@@ -296,7 +297,7 @@ else if (isset($_GET['place']))
 			//treff, XML blir transformert og skrevet ut
 			else
 			{
-				echo "Antall treff: $hits<br /><br />\n";
+				echo "<p>Antall treff: $hits</p>\n";
 				
 				$params = array(array('namespace' => '', 'name' => 'url_ext', 'value' => "$geoId&place=$place&type=".$type),
 							array('namespace' => '', 'name' => 'sortBy', 'value' => $sortBy),
