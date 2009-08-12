@@ -1,0 +1,508 @@
+Afghanistan:915.8104
+Afrika:916.04
+Agra:915.4604
+Akershus:914.82204
+Alaska:917.9804
+Albania:914.96504
+Albuquerque:917.8904
+Algarve:914.6904
+Algerie:916.5
+Alpene:914.4504
+Alpene:914.9404
+Amalfi:914.5704
+Amsterdam:914.9204
+Andalusia:914.6804
+Andesfjellene:918.04
+Angkor:915.9604
+Antigua:917.297404
+Antwerpen:914.9304
+Aosta:914.5104
+Arabia:915.304
+Argentina:918.204
+Arizona:917.9104
+Armenia:914.75604
+Aruba:917.29804
+Aserbajdsjan:914.75404
+Asia:915.04
+Asia:915.404
+Asia:915.804
+Asia:915.904
+Athen:914.95104
+Australia:919.404
+Australia:919.4104
+Azorene:914.69904
+Bahamas:917.29604
+Baja California:917.204
+Bali:915.98604
+Balkanstatene:914.9604
+Baltiske stater:914.7904
+Bangkok:915.9304
+Bangladesh:915.49204
+Barbados:917.298104
+Barbuda:917.297404
+Barcelona:914.6704
+Basilicata:914.5704
+Baskerland:914.6604
+Bayern:914.3304
+Beijing:915.11504
+Belfast:914.1604
+Belgia:914.9304
+Belize:917.28204
+Benin:916.68304
+Beograd:914.97104
+Bergen:914.836
+Bergen:914.8363104
+Berlin:914.31504
+Bermuda:917.29904
+Bhutan:915.49804
+Bilbao:914.6604
+Blefjell:914.82604
+Bolivia:918.404
+Bologna:914.5404
+Bonaire:917.29804
+Borneo:915.98304
+Bornholm:914.89204
+Bosnia-Herzegovina:914.974204
+Boston:917.4404
+Botswana:916.88304
+Brügge:914.9304
+Brasil:918.104
+Bretagne:914.4104
+British Columbia:917.1104
+Brunei:915.9504
+Brussel:914.93304
+Budapest:914.3904
+Buenos Aires:918.21104
+Bulgaria:914.9904
+Burkina Faso:916.62504
+Buskerud:914.82604
+Córdoba:914.6804
+California:917.9404
+Canada:917.104
+Cape Town:916.8704
+Capri:914.5704
+Charente-Maritime:914.4604
+Charleston:917.5704
+Chicago:917.7304
+Chile:918.304
+Colombia:918.6104
+Colorado:917.8804
+Columbia River:917.904
+Cook-Øyene:919.6204
+Cork:914.1504
+Costa Brava:914.6704
+Costa del Sol:914.6804
+Costa Rica:917.28604
+Cuba:917.29104
+Curaçao:917.29804
+Danmark:914.8904
+Delhi:915.4504
+Dolomittene:914.504
+Dominikanske republikk:917.29304
+Dordogne:914.4704
+Dorset:914.2204
+Dubai:915.35704
+Dublin:914.1704
+Dubrovnik:914.97204
+Ecuador:918.6604
+Edinburgh:914.1104
+Egypt:916.204
+El Salvador:917.28404
+Emilia-Romagna:914.5404
+England:914.204
+Eritrea:916.3504
+Estland:914.79804
+Etiopia:916.304
+Europa:914.04
+Europa:914.304
+Fijiøyene:919.61104
+Filippinene:915.9904
+Finland:914.89704
+Firenze:914.5504
+Florida:917.5904
+Florida Keys:917.5904
+Forente Arabiske Emirater:915.35704
+Forente Stater:917.304
+Forente Stater:917.904
+Formentera:914.67504
+Frankrike:914.404
+Frankrike:914.4204
+Frankrike:914.4704
+Frans Josefs Land:919.8504
+Fransk Polynesia:919.6204
+Fuerteventura:916.4904
+Fyn:914.89404
+Færøyene:914.91504
+Galapagosøyene:918.6604
+Gambia:916.65104
+Gent:914.9304
+Georgia:914.75804
+Georgia:917.5804
+Ghana:916.6704
+Glasgow:914.1104
+Goa:915.4704
+Gotland:914.8604
+Gran Canaria:916.4904
+Granada:914.6804
+Grand Canyon:917.9104
+Grand Teton Nasjonalpark:917.8704
+Great Barrier Reef:919.4304
+Greske øyer:914.9504
+Grønland:919.8204
+Guatemala:917.28104
+Gudbrandsdalen:914.82504
+Guyana:918.8104
+Gøta-Kanalen:914.8604
+Hadrians mur:914.2804
+Havana:917.29104
+Hawaii:919.6904
+Hebridene:914.11404
+Hellas:914.9504
+Helsinki:914.897104
+Himalaya:915.49604
+Hong Kong:915.12504
+Hordaland:914.83604
+Hviterussland:914.7804
+Ibiza:914.67504
+Illinois:917.7304
+India:915.404
+Indonesia:915.9804
+Irak:915.6704
+Iran:915.504
+Irland:914.1504
+Island:914.91204
+Israel:915.69404
+Istanbul:914.96104
+Italia:914.504
+Italia:914.5604
+Italia:914.5704
+Jamaica:917.29204
+Jan Mayen:919.8304
+Japan:915.204
+Java:915.98204
+Jersey:914.23404
+Jerusalem:915.69404
+Jomfruøyene:917.29704
+Joniske øyer:914.95504
+Jordan:915.69504
+Jura:914.4404
+Jylland:914.89404
+Kairo:916.21604
+Kaliningrad:914.7204
+Kambodsja:915.9604
+Kanaløyene:914.23404
+Kanariøyene:916.4904
+Kapp Verde:916.65804
+Karakorum:915.04
+Karibia:917.2904
+Kasakhstan:915.84504
+Katalonia:914.6704
+Kauai:919.6904
+Kaukasus:914.7504
+Kaunas:914.79304
+Kefallinia:914.95504
+Kentucky:917.6904
+Kenya:916.76204
+Kerala:915.48304
+Kiev:914.7704
+Kina:915.104
+Kirgisistan:915.84304
+Komorene:916.9404
+Korea:915.1904
+Korea:915.19304
+Korfu:914.95504
+Korsika:914.49404
+Kos:914.958704
+Kosovo:914.97104
+Krabi:915.9304
+Krakow:914.3804
+Kreta:914.95904
+Kristiansand:914.83204
+Kroatia:914.97204
+Kuala Lumpur:915.95
+Kypros:915.69304
+København:914.891404
+La Gomera:916.4904
+Lake district:914.2704
+Languedoc:914.4804
+Lanzarote:916.4904
+Laos:915.9404
+Las Vegas:917.9304
+Latinamerika:918.04
+Latvia:914.79604
+Lesotho:916.88504
+Libanon:915.69204
+Libya:916.1204
+Lisboa:914.694204
+Litauen:914.79304
+Ljubljana:914.97304
+Lofoten:914.844504
+Loire:914.4504
+Lombardia:914.5204
+Lombok:915.98604
+London:914.2104
+Los Angeles:917.9404
+Lot:914.4704
+Louisiana:917.304
+Luxembourg:914.93504
+Læsø:914.89504
+Macau:915.12604
+Madagaskar:916.9104
+Madeira:914.69804
+Madrid:914.64104
+Maine:917.4104
+Malawi:916.89704
+Malaysia:915.9504
+Maldivene:915.49504
+Mali:916.6204
+Mallorca:914.67504
+Malta:914.58504
+Man:914.279
+Marche:914.504
+Margarita:918.704
+Marokko:916.404
+Martinique:917.29804
+Massachusetts:917.404
+Mauritius:916.9804
+Melaka:915.95
+Melanesia:919.504
+Melbourne:919.4504
+Mellom-Amerika:917.2804
+Menorca:914.67504
+Mexico:917.204
+Mexico City:917.204
+Miami:917.5904
+Michigan:917.7404
+Midtøsten:915.604
+Mikronesia:919.6504
+Milano:914.5204
+Minnesota:917.7604
+Mississippi:917.304
+Moldova:914.7604
+Mongolia:915.1704
+Montana:917.8604
+Montenegro:914.974504
+Montréal:917.1404
+Mosambik:916.7904
+Moskva:914.7304
+Mumbai:915.4704
+Myanmar:915.9104
+München:914.3304
+Møre og Romsdal:914.83904
+Månen:919.904
+Nagorno-Karabakh:914.75404
+Namibia:916.88104
+Napoli:914.5704
+Nederland:914.9204
+Nepal:915.49604
+Nevada:917.9304
+New England:917.404
+New Jersey:917.4904
+New Mexico:917.8904
+New Orleans:917.6304
+New South Wales:919.4404
+New York:917.4704
+New Zealand:919.304
+Nicaragua:917.28504
+Nice:914.4904
+Norden:914.804
+Nord-Irland:914.1604
+Nordland:914.84404
+Nord-Norge:914.84304
+Nord-Trøndelag:914.84404
+Norefjell:914.82638
+Norge:914.8104
+Normandie:914.4204
+North Carolina:917.5604
+Northern Territory:919.4204
+Ny-Caledonia:919.59704
+Oahu:919.6904
+Oman:915.35304
+Ontario:917.1304
+Oregon:917.9504
+Orknøyene:914.11304
+Oslo:914.82104
+Oslofjorden:914.8204
+Pakistan:915.49104
+Palestina:915.69404
+Panama:917.28704
+Papua Ny-Guinea:919.5304
+Paraguay:918.9204
+Paris:914.436104
+Patagonia:918.204
+Peloponnes:914.9504
+Penang:915.95
+Perth:919.4104
+Peru:918.504
+Philadelphia:917.4804
+Phuket:915.9304
+Picos de Europa:914.604
+Piemonte:914.5104
+Pilegrimsreiser:914.404
+Pilegrimsreiser:914.604
+Pilegrimsreiser:914.8104
+Pilegrimsreiser:914.8204
+Pilegrimsreiser:914.82104
+Pilegrimsreiser:914.82204
+Pilegrimsreiser:914.82404
+Pilegrimsreiser:914.825504
+Pilegrimsreiser:914.8504
+Pittsburgh:917.4804
+Polen:914.3804
+Portugal:914.6904
+Praha:914.37104
+Provence:914.4904
+Puerto Rico:917.29504
+Puerto Vallarta:917.204
+Puglia:914.5704
+Pyreneene:914.604
+Påskeøya:919.6104
+Queensland:919.4304
+Québec:917.1404
+Rajasthan:915.4404
+Reisehåndbøker:910.202
+Reykjavik:914.91204
+Rhode Island:917.4504
+Rhodos:914.958704
+Riga:914.79604
+Rio de Janeiro:918.104
+Rivieraen:914.4904
+Rivieraen:914.5104
+Rocky Mountains:917.1104
+Rocky Mountains:917.804
+Rodrigues:916.904
+Rogaland:914.83404
+Roma:914.5604
+Romania:914.9804
+Rondane:914.82504
+Roussillon:914.4804
+Russland:914.704
+Réunion:916.904
+Sahara:916.604
+Saint Lucia:917.2984304
+Saint Vincent:917.2984404
+Salomonøyene:919.59304
+Salzburg:914.3604
+Samoaøyene:919.6104
+Samos:914.95804
+Samsø:914.89404
+San Diego:917.9404
+San Francisco:917.9404
+San Marino:914.5404
+Santa Fe:917.8904
+Sardinia:914.5904
+Savannah:917.5804
+Seattle:917.9704
+Senegal:916.6304
+Seoul:915.19504
+Serbia:914.97104
+Sevilla:914.6804
+Seychellene:916.9604
+Shanghai:915.11304
+Shetlandsøyene:914.11304
+Sicilia:914.5804
+Siena:914.5504
+Singapore:915.95704
+Sjælland:914.89104
+Sjøreiser:910.4504
+Skottland:914.1104
+Skrimfjella:914.82641
+Skåne:914.8604
+Slovakia:914.37304
+Slovenia:914.97304
+Sogn og Fjordane:914.83804
+Somerset:914.2304
+Sorrento:914.5704
+South Carolina:917.5704
+Sovjetunionen:914.704
+Spania:914.604
+Sri Lanka:915.49304
+St. Petersburg:914.7204
+Stillehavsøyene:919.504
+Stockholm:914.87304
+Storbritannia:914.104
+Sulawesi:915.98404
+Sumatra:915.98104
+Svalbard:919.8104
+Sveits:914.9404
+Sverige:914.8504
+Swaziland:916.88704
+Sydney:919.4404
+Syria:915.69104
+Sør-Afrika:916.804
+Sørlandet:914.8304
+Sørlige Afrika:916.804
+Sør-Norge:914.8104
+Sør-Tirol:914.504
+Tadsjikistan:915.8604
+Tahiti:919.6204
+Taiwan:915.1204
+Tallinn:914.79804
+Tanzania:916.7804
+Taos:917.8904
+Tasmania:919.4604
+Telemark:914.82804
+Tenerife:916.4904
+Tennessee:917.6804
+Texas:917.6404
+Thailand:915.9304
+Themsen:914.2204
+Tibet:915.1504
+Timor Timur:915.9804
+Tobago:917.298304
+Tokyo:915.204
+Tonga:919.61204
+Toronto:917.1304
+Toscana:914.5504
+Trinidad:917.298304
+Trøndelag:914.8404
+Tsjekkia:914.37104
+Tunisia:916.1104
+Tyrkia:915.6104
+Tyskland:914.304
+Uganda:916.76104
+Ukraina:914.7704
+Umbria:914.5604
+Ungarn:914.3904
+Uruguay:918.9504
+Usbekistan:915.8704
+Utah:917.9204
+Valencia:914.6704
+Vancouver:917.1104
+Vancouver Island:917.1104
+Vanuatu:919.59504
+Vendée:914.4104
+Veneto:914.5304
+Venezia:914.5304
+Venezuela:918.704
+Vest-Afrika:916.604
+Vest-Agder:914.83204
+Vesterålen:914.844604
+Vestfold:914.82704
+Vestlandet:914.83304
+Vietnam:915.9704
+Vilnius:914.79304
+Virginia:917.5504
+Wales:914.2904
+Warszawa:914.3804
+Washington:917.9704
+Washington, D.C.:917.5304
+Wien:914.36104
+Wien:914.361
+Wyoming:917.8704
+Yellowstone Nasjonalpark:917.8704
+Yucatán:917.204
+Zadar:914.97204
+Zagreb:914.97204
+Zambia:916.89404
+Zanzibar:916.7804
+Zimbabwe:916.89104
+Øst-Afrika:916.7604
+Øst-Asia:915.04
+Østerdalen:914.82404
+Østerrike:914.3604
+Øst-Europa:914.704
+Østfold:914.82304
+Østlandet:914.82
+Østlandet:914.8204
+Åland:914.897304

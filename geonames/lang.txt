@@ -1,0 +1,3 @@
+Innholdet i lang.csv er hentet herfra: 
+http://no.wikipedia.org/wiki/Liste_over_ISO_639-1-koder
+Kolonner som ikke er relevante er fjernet for hånd
