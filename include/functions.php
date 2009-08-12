@@ -10,7 +10,7 @@ valgt
 function writeSearchForm($selected='z39.50', $text='')
 {
 	//array med valg, nøkkel blir 'value', verdi blir listevalg
-	$options = array('z39.50' => 'Z39.50', 'sru' => 'SRU', 'rss' => 'RSS');
+	$options = array('z39.50' => 'Z39.50', 'sru' => 'SRU');
 ?>
 <form method="get" action="">
 	<p>
