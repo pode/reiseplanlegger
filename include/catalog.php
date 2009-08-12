@@ -4,36 +4,6 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL|E_STRICT);
 
 /*
-kvalifikatorsetup til yaz_ccl_conf, disse verdiene er hentet fra
-BIB-1 attributtsettet funnet her:
-http://bibsyst.no/produkter/bibliofil/bib1.php
-ti => 1=4
-ti = tittel
-1 = structure (virker bare med 1 her)
-4 = use attribute
-
-KVALIFIKATORFORKLARING:
-ti -> tittel
-kl -> klassifikasjon (dewey)
-fo -> forfatter
-år -> år
-sp -> språk
-eo -> emneord
-is -> isbn
-tnr -> tittelnummer
-*/
-$config = array(
-	"ti" => "1=4",
-	"kl" => "1=13",
-	"fo" => "1=1003",
-	"år" => "1=31",
-	"sp" => "1=54",
-	"eo" => "1=21",
-	"is" => "1=7",
-	"tnr" => "1=12",
-	"ke" => "1=21");
-
-/*
 funksjon som returnerer katalogdata, parametere er ccl-søkestreng,
 syntax(normarc, usmarc, marc21), returformat(string, xml), om det
 skal legges til en ny root-node i XML-strukturen og
@@ -41,8 +11,8 @@ z39.50-server-url:portnummer/database
 */
 function yazCclSearch()
 {
-	//inkluderer den globale arrayen $config
-	global $config;
+	//henter den globale konfigurasjonen
+	$config = get_config();
 	
 	//$GLOBALS['fields'];
 	
@@ -137,7 +107,7 @@ på samme måte som yazCclSearch
 */
 function yazCclArray($ccl, $syntax = 'marc21', $host = 'z3950.deich.folkebibl.no:210/data')
 {
-	global $config;
+	$config = get_config();
 	
 	$type = 'xml';
 		
@@ -183,4 +153,39 @@ function yazCclArray($ccl, $syntax = 'marc21', $host = 'z3950.deich.folkebibl.no
 	
 	return $ret;
 }
+
+function get_config() {
+
+	/*
+	kvalifikatorsetup til yaz_ccl_conf, disse verdiene er hentet fra
+	BIB-1 attributtsettet funnet her:
+	http://bibsyst.no/produkter/bibliofil/bib1.php
+	ti => 1=4
+	ti = tittel
+	1 = structure (virker bare med 1 her)
+	4 = use attribute
+	
+	KVALIFIKATORFORKLARING:
+	ti -> tittel
+	kl -> klassifikasjon (dewey)
+	fo -> forfatter
+	år -> år
+	sp -> språk
+	eo -> emneord
+	is -> isbn
+	tnr -> tittelnummer
+	*/
+	return $config = array(
+		"ti" => "1=4",
+		"kl" => "1=13",
+		"fo" => "1=1003",
+		"år" => "1=31",
+		"sp" => "1=54",
+		"eo" => "1=21",
+		"is" => "1=7",
+		"tnr" => "1=12",
+		"ke" => "1=21");	
+	
+}
+
 ?>
