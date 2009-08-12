@@ -1,2 +1,7 @@
-# Denne oppdateres automatisk 
+# Denne oppdateres automatisk, det er liten vits i å måtte ha den med
+# i hver eneste commit
 benchmark.txt
+
+# Eksperimentelle eksterne "pakker"
+phpmyadmin/
+querypath-2.0-alpha2/
