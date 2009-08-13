@@ -86,7 +86,7 @@ if (isset($_GET['tittelnr']))
 	echo "<h3>Reisehåndbok:</h3>\n";
 	//lagrer tittelnummer
 	$tnr = $_GET['tittelnr'];
-	//lagrer søketype (Z39.50, SRU, RSS)
+	//lagrer søketype (Z39.50, SRU)
 	$type = $_GET['type'];
 	$place = "";
 	
@@ -108,67 +108,6 @@ if (isset($_GET['tittelnr']))
 		
 		//gjennomfører transformasjon og skriver ut resultatet
 		echo transformToHTML($xml_data, $xsl_url, $params);
-	}
-	//hvis søketype er RSS
-	else if($type=="rss")
-	{
-		/*
-		lagrer ccl-søkestreng, hvis stedet har eget deweynummer
-		blir denne søkt på. dewey_list.txt er en liste over
-		steder og deweynummere
-		*/
-		$ccl = getCcl($place, "dewey/dewey_list.txt", 'rss');
-		//bygger opp URL til RSS med CCL
-		$url = getRSSURL($ccl, '', '11');
-		
-		//henter bokdata gjennom RSS
-		$result = getRSS($url, "", $tnr, 'reiseplanlegger.php');
-		
-		//gir beskjed om det ikke ble noen resultater
-		if($result['count']>0)
-			echo "\t\tSøket ga ". $result['count'] ." treff.<br />\n";
-		//går gjennom resultatarrayen
-		foreach($result['result'] as $output)
-		{
-			//fjerner pre-tag (passer ikke med vår layout)
-			$output = str_replace("<pre>", "", $output);
-			$output = str_replace("</pre>", "", $output);
-			//fjerner center-tag (passer ikke med vår layout)
-			$output = str_replace("<center>", "<br />\n<br />\n", $output);
-			/*
-			legger til alt-attributten i img-taggen for å gjøre
-			dokumentet XHTML 1.0 Strict
-			*/
-			$output = str_replace("<img", "<img alt=\"\"", $output);
-			//legger til image-slutttag av samme årsak som over
-			$output = str_replace("</center>", "</img>\n<br />\n<br />\n", $output);
-			echo "\t\t$output";
-		}
-		/*
-		Metoden med å bare hente ut en bok ved hjelp av tittelnummer
-		vil fungere meget dårlig, siden det blir et nytt søk og ny
-		lang ventetid
-		*/
-		/*
-		$xsl_path = '../xsl/bokrss.xsl';
-		$xml_data = "http://www.deich.folkebibl.no/cgi-bin/rss?websok=websok&format=11&antall=100&ccl=tnr=$tnr";
-		
-		// Load the XML source
-		$xml = new DOMDocument;
-		$xml->load($xml_data);
-
-		// Load the XSL source
-		$xsl = new DOMDocument;
-		$xsl->load($xsl_path);
-
-		// Configure the transformer
-		$proc = new XSLTProcessor;
-		$proc->setParameter('', 'url_ext', "&geoId=".$geoId."&type=".$type);
-		$proc->importStyleSheet($xsl); // attach the xsl rules
-
-		$dom = $proc->transformToDoc($xml);
-		$html = $dom->saveXML();
-		echo $html;*/
 	}
 	//hvis søketype er SRU
 	else if($type=="sru")
@@ -248,16 +187,14 @@ else if (isset($_GET['place']))
 		
 		echo "\t<h3>Søkeresultat:</h3>\n";
 		
-		/*
-		hvis type ikke er RSS blir det laget et sorteringsskjema
-		i toppen av resultatlisten
-		*/
-		if ($type!='rss')
+
+		if (empty($geoId2)) 
 		{
-			if (empty($geoId2))
-				writeSortingForm($place, $type, $sortBy, $order);
-			else
-				writeSortingForm($place, $type, $sortBy, $order, $geoId2);
+			writeSortingForm($place, $type, $sortBy, $order);
+		}
+		else
+		{
+			writeSortingForm($place, $type, $sortBy, $order, $geoId2);
 		}
 		
 		//hvis type er z39.50, man vil søke med z39.50
@@ -292,31 +229,6 @@ else if (isset($_GET['place']))
 							array('namespace' => '', 'name' => 'order', 'value' => $order));
 		
 				echo transformToHTML($xml, $xsl_url, $params);
-			}
-		}
-		//type er RSS
-		else if($type=="rss")
-		{
-			//oppretter ccl-søkestreng
-			$ccl = getCcl($place, "dewey/dewey_list.txt", 'rss');
-		
-			//henter URL til RSS-strøm
-			$url = getRSSURL($ccl, '', '11');
-
-			//henter RSS-data
-			$result = getRSS($url, "$geoId&amp;place=$place&amp;type=$type", '', 'reiseplanlegger.php');
-			
-			//ingen bøker funnet
-			if($result['count']==0)
-				echo "Ingen reisehåndbøker funnet...\n";
-			//treff blir skrevet ut
-			else
-			{
-				echo "\t\tAntall treff: ". $result['count'] ."<br /><br />\n";
-				foreach($result['result'] as $output)
-				{
-					echo "\t\t$output<br />";
-				}
 			}
 		}
 		//type er SRU
