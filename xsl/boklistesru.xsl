@@ -29,7 +29,7 @@
 					<xsl:value-of select="$rec/datafield[@tag=999]/subfield[@code='c']"/>
 				</xsl:variable>
 				<!-- Link med tittel som navn på linken -->
-				<a href="reiseplanlegger.php?tittelnr={$kohanr}{$url_ext}">
+				<a href="?tittelnr={$kohanr}{$url_ext}">
 					<xsl:value-of select="$rec/datafield[@tag=245]/subfield[@code='a']"/>
 					<!-- Henter ut undertittel -->
 					<xsl:for-each select="$rec/datafield[@tag=245]/subfield[@code='b']">
