@@ -96,12 +96,11 @@ if (isset($_GET['tittelnr']))
 	//hvis søketype er Z39.50
 	if($type=="z39.50")
 	{
-		//lagrer stier til XML og XSL
+		//lagrer sti til XSL
 		$xsl_url = 'xsl/bok.xsl';
-		$xml_url = "http://torfeus.deich.folkebibl.no/~magnus/kilder/marcxml_uns.php?ccl=tnr=$tnr";
 		
 		//lagrer XML-data som streng
-		$xml_data = file_get_contents($xml_url) or exit("Feil");
+		$xml_data = get_ccl_results_as_xml("tnr=$tnr") or exit("Feil");
 		
 		//lagrer array med parametere til XSLT
 		$params = array(array('namespace' => '', 'name' => 'url_ext', 'value' => '&type='.$type));
