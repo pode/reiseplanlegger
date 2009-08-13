@@ -108,6 +108,7 @@ på samme måte som yazCclSearch
 function yazCclArray($ccl, $syntax = 'marc21', $host = 'z3950.deich.folkebibl.no:210/data')
 {
 	$config = get_config();
+	$hits = 0;
 	
 	$type = 'xml';
 		

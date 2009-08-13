@@ -15,11 +15,11 @@ $(function(){
     },
   	
     i18n : {
-      editText       : '<img src="../images/widgets/edit.png"     alt="Rediger" width="16" height="16" />',
-      closeText      : '<img src="../images/widgets/close.png"    alt="Close"   width="16" height="16" />',
-      collapseText   : '<img src="../images/widgets/collapse.png" alt="Lukk"    width="16" height="16" />',
-      cancelEditText : '<img src="../images/widgets/edit.png"     alt="Avbryt"  width="16" height="16" />',
-      extendText     : '<img src="../images/widgets/extend.png"   alt="Close"   width="16" height="16" />'
+      editText       : '<img src="images/widgets/edit.png"     alt="Rediger" width="16" height="16" />',
+      closeText      : '<img src="images/widgets/close.png"    alt="Close"   width="16" height="16" />',
+      collapseText   : '<img src="images/widgets/collapse.png" alt="Lukk"    width="16" height="16" />',
+      cancelEditText : '<img src="images/widgets/edit.png"     alt="Avbryt"  width="16" height="16" />',
+      extendText     : '<img src="images/widgets/extend.png"   alt="Close"   width="16" height="16" />'
     }
   });
   
@@ -43,7 +43,7 @@ $(function(){
   // Hent nødvendige geodata fra serveren
   // Ved suksess vil getgeo.php returnere et array som inneholder et element "result" som vil 
   // være antallet treff. Vi bruker dette for å bestemme videre gang i skriptet
-  $.getJSON("getgeo.php", { geoId: geoId, place: place }, function(json){
+  $.getJSON("api/getgeo.php", { geoId: geoId, place: place }, function(json){
     
    
     // Fjern inneholdet i boksen som viser sted/tid
@@ -79,7 +79,7 @@ $(function(){
 				var this_widget = this;
 				target = this_widget.id.replace(/widget_/g, "");
 				
-				$.get("api.php", { mod: target, lat: json.placeInfo.lat, lon: json.placeInfo.lon },
+				$.get("api/index.php", { mod: target, lat: json.placeInfo.lat, lon: json.placeInfo.lon },
 		           function(data){
 		           	  $("#" + this_widget.id).find(".widget-content").text("");
 		              $("#" + this_widget.id).find(".widget-content").append(data);

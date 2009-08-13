@@ -4,27 +4,20 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL|E_STRICT);
 
 //inkluderer funksjoner
-require_once '../include/functions.php';
+require_once 'include/functions.php';
 
 //lagrer antall sekunder siden 1. januar 1970
 $time = microtime();
 $time = explode(' ', $time);
-$time = $time[1] + $time[0];
-$start = $time;
-
-//benchmark
-$benchmarkUrl = '../benchmark/benchmark.txt';
-$searchTimeToFile = null;
-$mashupTimeToFile = null;
-$hitsToFile = 0;
+$start = $time[1] + $time[0];
 
 //velger hva som skal inn i head-taggen
-$header_extras = array("<link rel=\"stylesheet\" type=\"text/css\" href=\"../css/mashup2.css\" />", 
-					   "<script type=\"text/javascript\" src=\"../scripts/bsn.AutoSuggest_2.1.3_comp.js\" charset=\"utf-8\"></script>",
-					   "<link rel=\"stylesheet\" href=\"../css/autosuggest_inquisitor.css\" type=\"text/css\" media=\"screen\" charset=\"utf-8\" />", 
-					   "<link rel=\"stylesheet\" href=\"../css/jquery.easywidgets.css\" type=\"text/css\" media=\"screen\" />", 
+$header_extras = array("<link rel=\"stylesheet\" type=\"text/css\" href=\"css/mashup2.css\" />", 
+					   "<script type=\"text/javascript\" src=\"scripts/bsn.AutoSuggest_2.1.3_comp.js\" charset=\"utf-8\"></script>",
+					   "<link rel=\"stylesheet\" href=\"css/autosuggest_inquisitor.css\" type=\"text/css\" media=\"screen\" charset=\"utf-8\" />", 
+					   "<link rel=\"stylesheet\" href=\"css/jquery.easywidgets.css\" type=\"text/css\" media=\"screen\" />", 
 					   "<script src=\"http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAA4bkAB4c8qRFagE_bUojf3hS-l405Vpwg0XB2Ibm6AlGOmZ6JbhTiF85MU3mn8joSdlDb19Mam3gFSw&sensor=false\" type=\"text/javascript\"></script>", 
-						"<script type=\"text/javascript\" src=\"../scripts/googlemaps.js\"></script>");
+						"<script type=\"text/javascript\" src=\"scripts/googlemaps.js\"></script>");
 						
 $header_extras[] = '<script src="http://www.google.com/jsapi"></script>
 <script>
@@ -34,8 +27,8 @@ $header_extras[] = '<script src="http://www.google.com/jsapi"></script>
   // Load language API
   google.load("language", "1"); 
 </script>
-<script src="../scripts/jquery.easywidgets.min.js" type="text/javascript"></script>
-<script src="../scripts/bokser.js" type="text/javascript"></script>';
+<script src="scripts/jquery.easywidgets.min.js" type="text/javascript"></script>
+<script src="scripts/bokser.js" type="text/javascript"></script>';
 
 //forteller hvilken filtype (MIME) og tegnsett som skal brukes
 header('Content-Type: text/html; Extension: xhtml; charset=utf-8');
@@ -104,7 +97,7 @@ if (isset($_GET['tittelnr']))
 	if($type=="z39.50")
 	{
 		//lagrer stier til XML og XSL
-		$xsl_url = '../xsl/bok.xsl';
+		$xsl_url = 'xsl/bok.xsl';
 		$xml_url = "http://torfeus.deich.folkebibl.no/~magnus/kilder/marcxml_uns.php?ccl=tnr=$tnr";
 		
 		//lagrer XML-data som streng
@@ -124,7 +117,7 @@ if (isset($_GET['tittelnr']))
 		blir denne søkt på. dewey_list.txt er en liste over
 		steder og deweynummere
 		*/
-		$ccl = getCcl($place, "../dewey/dewey_list.txt", 'rss');
+		$ccl = getCcl($place, "dewey/dewey_list.txt", 'rss');
 		//bygger opp URL til RSS med CCL
 		$url = getRSSURL($ccl, '', '11');
 		
@@ -181,7 +174,7 @@ if (isset($_GET['tittelnr']))
 	else if($type=="sru")
 	{
 		//lagrer sti til XSL
-		$xsl_url = '../xsl/boksru.xsl';
+		$xsl_url = 'xsl/boksru.xsl';
 		//bygger opp URL til KOHA-server
 		$xml_url = getSRUURL("rec.id=$tnr");
 		
@@ -271,10 +264,10 @@ else if (isset($_GET['place']))
 		if($type=="z39.50")
 		{
 			//oppretter ccl-søkestreng
-			$ccl = getCcl($place, "../dewey/dewey_list.txt", 'z39.50');
+			$ccl = getCcl($place, "dewey/dewey_list.txt", 'z39.50');
 		
 			//sti til XSL
-			$xsl_url = '../xsl/bokliste.xsl';
+			$xsl_url = 'xsl/bokliste.xsl';
 
 			//oppretter DOM-dok med XML-data
 			$xml = new DOMDocument;
@@ -283,8 +276,6 @@ else if (isset($_GET['place']))
 			//teller antallet <record>-noder (antall søketreff)
 			$nodeList = $xml->getElementsByTagName('record');
 			$hits = $nodeList->length;
-			
-			$hitsToFile = $hits;
 			
 			//ingen treff
 			if ($hits==0)
@@ -307,15 +298,13 @@ else if (isset($_GET['place']))
 		else if($type=="rss")
 		{
 			//oppretter ccl-søkestreng
-			$ccl = getCcl($place, "../dewey/dewey_list.txt", 'rss');
+			$ccl = getCcl($place, "dewey/dewey_list.txt", 'rss');
 		
 			//henter URL til RSS-strøm
 			$url = getRSSURL($ccl, '', '11');
 
 			//henter RSS-data
 			$result = getRSS($url, "$geoId&amp;place=$place&amp;type=$type", '', 'reiseplanlegger.php');
-			
-			$hitsToFile = $result['count'];
 			
 			//ingen bøker funnet
 			if($result['count']==0)
@@ -334,11 +323,11 @@ else if (isset($_GET['place']))
 		else if($type=="sru")
 		{
 			//oppretter cql-spørresetning
-			$cql = getCql($place, "../dewey/dewey_list.txt");
+			$cql = getCql($place, "dewey/dewey_list.txt");
 			//oppretter URL til KOHA med cql
 			$xml_url = getSRUURL($cql);
 			//sti til XSL
-			$xsl_url = '../xsl/boklistesru.xsl';
+			$xsl_url = 'xsl/boklistesru.xsl';
 
 			//henter XML-data
 			$xml_data = file_get_contents($xml_url) or exit("Feil");
@@ -352,8 +341,6 @@ else if (isset($_GET['place']))
 			//teller antallet <recordData>-noder (antall søketreff)
 			$nodeList = $xml->getElementsByTagName('recordData');
 			$hits = $nodeList->length;
-			
-			$hitsToFile = $hits;
 			
 			//parametere til XSL
 			$params = array(array('namespace' => '', 'name' => 'url_ext', 'value' => "$geoId&place=$place&type=".$type),
@@ -370,10 +357,9 @@ else if (isset($_GET['place']))
 		//lagrer tid etter søk, differanse er tid løpt
 		$time = microtime();
 		$time = explode(' ', $time);
-		$time = $time[1] + $time[0];
-		$finish = $time;
-		$searchTimeToFile = round(($finish - $search_start), 4);
-		$search_time = "Søket tok $searchTimeToFile sekunder.";
+		$finish = $time[1] + $time[0];
+		$searchTime = round(($finish - $search_start), 4);
+		$search_time = "Søket tok $searchTime sekunder.";
 	}
 }
 /*
@@ -399,15 +385,15 @@ else if (!isset($_GET['about']))
 				</div>
 				<div id="right-col" class="widget-place">
 				<div class="right-col-box" id="place">
-                    <div class="widget-content"><img src="../images/widgets/loading.gif" alt="Henter data..." /></div>
+                    <div class="widget-content"><img src="images/widgets/loading.gif" alt="Henter data..." /></div>
 				</div>
 				<div class="widget movable collapsable right-col-box" id="widget_weather">
 			    	<div class="widget-header">Været</div>
-                    <div class="widget-content"><img src="../images/widgets/loading.gif" alt="Henter data..." /></div>
+                    <div class="widget-content"><img src="images/widgets/loading.gif" alt="Henter data..." /></div>
 				</div>
 				<div class="widget movable collapsable right-col-box" id="widget_map">
 			    	<div class="widget-header">Kart</div>
-                    <div class="widget-content"><img src="../images/widgets/loading.gif" alt="Henter data..." /></div>
+                    <div class="widget-content"><img src="images/widgets/loading.gif" alt="Henter data..." /></div>
 				</div>
 				</div>
 								
@@ -417,10 +403,8 @@ else if (!isset($_GET['about']))
 //lagrer slutttid for hele siden
 $time = microtime();
 $time = explode(' ', $time);
-$time = $time[1] + $time[0];
-$finish = $time;
+$finish = $time[1] + $time[0];
 $total_time = round(($finish - $start), 4);
-$mashupTimeToFile = &$total_time;
 //skriver ut tidtaking
 echo "\t\t\t\t\t<p>Siden lastet på $total_time sekunder. $search_time</p>\n";
 ?>
@@ -433,7 +417,7 @@ echo "\t\t\t\t\t<p>Siden lastet på $total_time sekunder. $search_time</p>\n";
 <script type="text/javascript">
 //<![CDATA[
 	var options = {
-		script:"../autosuggest/autosuggest.php?json=true&limit=10&info=true&",
+		script:"autosuggest/autosuggest.php?json=true&limit=10&info=true&",
 		varname:"input",
 		json:true,
 		shownoresults:false,
@@ -452,7 +436,7 @@ function get_ccl_results_as_xml($ccl) {
 	henter funksjonene i catalog.php, catalog.php inneholder
 	funksjoner for å hente ut katalogdata fra z39.50-servere
 	*/
-	require_once '../include/catalog.php';
+	require_once 'include/catalog.php';
 	
 	$out = '';
 	
