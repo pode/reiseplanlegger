@@ -105,7 +105,7 @@ returnerer en array med XML-data, hvert element i arrayen
 inneholder XML-data om en record. funksjonen fungerer omtrent
 på samme måte som yazCclSearch
 */
-function yazCclArray($ccl, $syntax = 'marc21', $host = 'z3950.deich.folkebibl.no:210/data')
+function yazCclArray($ccl, $syntax = 'marc21', $limit = 20, $host = 'z3950.deich.folkebibl.no:210/data')
 {
 	$config = get_config();
 	$hits = 0;
@@ -134,7 +134,7 @@ function yazCclArray($ccl, $syntax = 'marc21', $host = 'z3950.deich.folkebibl.no
 	$error = yaz_error($id);
 	if (!empty($error))
 	{
-		echo "Error: $error";
+		echo "Error yazCclArray: $error";
 	}
 	else
 	{
@@ -148,6 +148,9 @@ function yazCclArray($ccl, $syntax = 'marc21', $host = 'z3950.deich.folkebibl.no
 		$rec = yaz_record($id, $p, $type);
 		if (empty($rec)) continue;
 		$data[] = $rec;
+		if ($p == $limit) {
+		  break;
+		}
 	}
 	
 	$ret = array("hits" => $hits, "result" => $data);

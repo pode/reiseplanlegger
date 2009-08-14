@@ -298,12 +298,20 @@ else if (!isset($_GET['about']))
 				<div class="right-col-box" id="place">
                     <div class="widget-content"><img src="images/widgets/loading.gif" alt="Henter data..." /></div>
 				</div>
+				<div class="widget movable collapsable right-col-box" id="widget_stories">
+			    	<div class="widget-header">Fortellinger</div>
+                    <div class="widget-content"><img src="images/widgets/loading.gif" alt="Henter data..." /></div>
+				</div>
 				<div class="widget movable collapsable right-col-box" id="widget_weather">
 			    	<div class="widget-header">Været</div>
                     <div class="widget-content"><img src="images/widgets/loading.gif" alt="Henter data..." /></div>
 				</div>
 				<div class="widget movable collapsable right-col-box" id="widget_map">
 			    	<div class="widget-header">Kart</div>
+                    <div class="widget-content"><img src="images/widgets/loading.gif" alt="Henter data..." /></div>
+				</div>
+				<div class="widget movable collapsable right-col-box" id="widget_debug">
+			    	<div class="widget-header">Debug</div>
                     <div class="widget-content"><img src="images/widgets/loading.gif" alt="Henter data..." /></div>
 				</div>
 				</div>
@@ -340,6 +348,21 @@ echo "\t\t\t\t\t<p>Siden lastet på $total_time sekunder. $search_time</p>\n";
 	</body>
 </html>
 <?php
+
+/*
+Skriver benchmark-data til fil
+if (isset($_GET['place'])&&!isset($_GET['tittelnr']))
+{
+  $place = $_GET['place'];
+  $type = $_GET['type'];
+  
+  date_default_timezone_set('Europe/Oslo');
+  $timeStamp = date('d.m.y H:i:s');
+  
+  $benchmark = "$type\t$place\t$hitsToFile\t$mashupTimeToFile\t$searchTimeToFile\t$timeStamp\n";
+  file_put_contents($benchmarkUrl, $benchmark, FILE_APPEND) or exit("Feil");
+}
+*/
 
 function get_ccl_results_as_xml($ccl) {
 

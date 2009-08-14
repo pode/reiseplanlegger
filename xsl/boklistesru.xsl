@@ -10,9 +10,7 @@
 		</xsl:variable>
 		<xsl:choose>
 			<xsl:when test="$hits=0">
-				Ingen reisehåndbøker funnet... 
-				<br/>
-				<br/>
+				<p>Ingen treff...</p>
 			</xsl:when>
 			<xsl:otherwise>
 				Antall treff: <xsl:value-of select="$hits"/>

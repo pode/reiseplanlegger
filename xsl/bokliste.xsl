@@ -13,7 +13,7 @@
 					<xsl:value-of select="controlfield[@tag=001]"/>
 				</xsl:variable>
 				<!-- Link med tittel som navn på linken -->
-				<a href="?tittelnr={$tittelnr}{$url_ext}">
+				<a href="http://www.deich.folkebibl.no/cgi-bin/websok?mode=p&amp;st=p&amp;tnr={$tittelnr}">
 					<xsl:value-of select="datafield[@tag=245]/subfield[@code='a']"/>
 					<!-- Henter ut undertittel -->
 					<xsl:for-each select="datafield[@tag=245]/subfield[@code='b']">
@@ -53,7 +53,7 @@
 					<xsl:value-of select="controlfield[@tag=001]"/>
 				</xsl:variable>
 				<!-- Link med tittel som navn på linken -->
-				<a href="?tittelnr={$tittelnr}{$url_ext}">
+				<a href="http://www.deich.folkebibl.no/cgi-bin/websok?mode=p&amp;st=p&amp;tnr={$tittelnr}">
 					<xsl:value-of select="datafield[@tag=245]/subfield[@code='a']"/>
 					<!-- Henter ut undertittel -->
 					<xsl:for-each select="datafield[@tag=245]/subfield[@code='b']">

@@ -51,13 +51,17 @@ $(function(){
     
     if (json.result == 0) {
         
-        // Ingen treff, skriver ut en feilmelding
-        // TODO: Kunne man fått til å foreslå alternative skrivemåter? 
+        // INGEN TREFF, skriver ut en feilmelding
+        
         $("#place").find(".widget-content").append("<p>Beklager, 0 treff. Pr&oslash;v &aring; s&oslash;ke etter et annet stedsnavn.</p>");
+    
+        // TODO: Kunne man fått til å foreslå alternative skrivemåter? 
     
     } else if (json.result == 1) {
     	
-    	// Ett treff - lager bokser med info om stedet/landet
+    	// ETT TREFF - lager bokser med info om stedet/landet
+    	
+    	// Her har vi sted og land på engelsk
     	var place_country = json.placeInfo.place + ", " + json.placeInfo.country;
     	// Oversett sted og land til norsk, og skriv ut info på siden
     	google.language.translate(place_country, "en", "no", function(result) {
@@ -68,28 +72,43 @@ $(function(){
 			  $("#place").find("#lang-list").append("<li>" + this + "</li>");
 		    });
 		    $("#place").find(".widget-content").append("</ul>");
+		    
+		    // Hent ut navn på sted og land, på norsk
+			var split = result.translation.split(", "); 
+			var place_nor = split[0];
+			var country_nor = split[1];
+	        
+	    	// Gjør widgetene synlige
+	    	$(".widget").css({'visibility' : 'visible'});
+	    	  
+	    	// Gå igjennom alle widgetene og legg til innhold
+			jQuery.each($(".widget"), function() {
+			  var this_widget = this;
+			  target = this_widget.id.replace(/widget_/g, "");
+					
+			  // Vi sender den samme informasjonen til modulene, uavhengig av hva de skal gjøre for noe. 
+			  // På denne måten slipper vi å vite noe om hver enkelt modul før vi kaller dem opp. 
+			  $.get("api/index.php", { mod: target, 
+			                           lat: json.placeInfo.lat, 
+			                           lon: json.placeInfo.lon, 
+			                           place: place_nor, 
+			                           country: country_nor, 
+			                           type: getQueryVariable('type')
+			                          },
+			    function(data){
+			      $("#" + this_widget.id).find(".widget-content").text("");
+			      $("#" + this_widget.id).find(".widget-content").append(data);
+			    });
+			
+			  });
+		    
 		  }
 		});
-        
-    	  // Gjør widgetene synlige
-    	  $(".widget").css({'visibility' : 'visible'});
-    	  
-    	  // Gå igjennom alle widgetene og legg til innhold
-		  jQuery.each($(".widget"), function() {
-				var this_widget = this;
-				target = this_widget.id.replace(/widget_/g, "");
-				
-				$.get("api/index.php", { mod: target, lat: json.placeInfo.lat, lon: json.placeInfo.lon },
-		           function(data){
-		           	  $("#" + this_widget.id).find(".widget-content").text("");
-		              $("#" + this_widget.id).find(".widget-content").append(data);
-		        });
-		
-		  });
     	
     } else {
     	
-    	// Mer enn ett treff - vis liste med mulighet for å velge hvilket sted som var ment
+    	// FLERE TREFF - vis liste med mulighet for å velge hvilket sted som var ment
+    	
     	$("#place").find(".widget-content").append('<h3>Velg sted</h3>');
     	var sort_order_type = "&sortBy=" + getQueryVariable('sortBy') + "&order=" + getQueryVariable('order') + "&type=" + getQueryVariable('type');
     	jQuery.each(json.links, function() {
