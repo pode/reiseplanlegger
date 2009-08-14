@@ -95,96 +95,6 @@ function searchField()
 <?php
 }
 
-/*
-funksjon som bygger opp URL til RSS-strøm. tar tre argumenter $ccl,
-$number og $format. $ccl er ccl-søkestrengen, $number er maks antall
-verker i RSS-strømmen, $format angir hvilket format man ønsker. vi
-bruker for det meste format 11 som er vanlig tekst. format 5 er marc
-i xml
-*/
-function getRSSURL()
-{
-	$args = func_get_args();
-
-	if (!$args[1]) { $args[1] = "100"; }
-	if (!$args[2]) { $args[2] = "11"; }
-	
-	$ccl 		=& $args[0];
-	$number		=& $args[1];
-	$format		=& $args[2];
-	
-	$url = trim("http://www.deich.folkebibl.no/cgi-bin/rss?websok=websok&amp;format=$format&amp;antall=$number&amp;ccl=$ccl");
-
-	return $url;
-}
-
-/*
-funksjon som henter bokdata gjennom RSS
-*/
-function getRSS($url, $params, $bookInfo, $php_file)
-{
-	/*
-	bruker CURL for å hente data gjennom RSS for å unngå timeout
-	*/
-	//create curl resource
-	$ch = curl_init();
-
-	//set url
-	curl_setopt($ch, CURLOPT_URL, $url);
-
-	//return the transfer as a string
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
-	//$output contains the output string
-	$output = curl_exec($ch);
-
-	//close curl resource to free up system resources
-	curl_close($ch);
-	
-	//Bruker simplexml til å lese RSS-XML'en
-	$rss = simplexml_load_string($output);
-	
-	$count = 0;
-	$result = array();
-	
-	//Går gjennom XML'en og henter ut informasjonen som ligger i item noden
-	foreach ($rss->channel->item as $item)
-	{
-		//Henter ut informasjonen som ligger i link noden
-		$link = $item->link;
-		/*
-		Henter ut nummeret som Deichmanske bruker som id-nummer for hver bok. 
-		Dette brukes til å finne ut hvilken bok som blir trykket på, og derfor
-		hvilken bok det skal hentes ut informasjon om.
-		*/
-		$tnr = substr($link, strpos($link, "tnr=")+4, mb_strlen($link));
-		
-		if(!empty($bookInfo))
-		{
-			//Sjekker om id-nummeret som ble sendt med som parameter, stemmer med tnr
-			if ((int)$bookInfo==(int)$tnr)
-			{	
-				//Skriver ut informasjon
-				$result[] = "<strong>$item->title</strong>";
-				$result[] = $item->description;
-				$result[] = "<br /><a href=\"$link\">Link til Deichmanske bibliotek</a>";
-				break;
-			}
-		}
-		else
-		{
-			//Lager linkene med parametere som skal sendes med
-			$result[$count] = "<a href=\"$php_file?$params&amp;tittelnr=$tnr\">$item->title</a><br />\n";
-			$count++;
-		}
-	}
-
-	//Skriver ut antall treff og listen med linker
-	$return = array("result" => $result,
-					"count" => $count);
-					
-	return $return;
-}
 
 /* Diverse geo-realterte funksjoner flyttet til getgeo.php */
 
@@ -289,31 +199,6 @@ function get_files($root_dir, $all_data=array())
 } // end get_files()
 
 /*
-funksjon som lager et skjema, som tar et søkeord som parameter
-*/
-function sok_old()
-{
-?>
-		<h2>Testsøk mot RSS-strømmer fra Deichmanske</h2>
-		<div>
-			<form action="rss.php" method="get">
-				<p>
-					<input type="text" name="sok" />
-					<input type="submit" value="Søk" />
-					Antall:
-					<select name="antall">
-						<option value="10">10</option>
-						<option value="100" selected="selected">100</option>
-						<option value="1000">1000</option>
-						<option value="10000">10000</option>
-					</select>
-				</p>
-			</form>
-		</div>
-<?php
-}
-
-/*
 funksjon som bygger opp ccl-søkestrenger til reiseplanlegger
 */
 function getCcl($query, $path, $type)
@@ -321,10 +206,7 @@ function getCcl($query, $path, $type)
 	//Prøver og åpne filen
 	$fil = file_get_contents($path) or exit("Kunne ikke hente fil... ".$path);
 	//Lager et standardsøk, hvis vi ikke finner et land som stemmer med det i filen, blir denne brukt
-	if ($type!='rss')	
-		$ccl = "(ke=914*04 or ke=915*04 or ke=916*04 or ke=917*04 or ke=918*04 or ke=919*04) and ti=".preg_replace('/\s+/', '+', $query);
-	else
-		$ccl = "(914*04/ke or 915*04/ke or 916*04/ke or 917*04/ke or 918*04/ke or 919*04/ke) and ti=".preg_replace('/\s+/', '+', $query);
+	$ccl = "(ke=914*04 or ke=915*04 or ke=916*04 or ke=917*04 or ke=918*04 or ke=919*04) and ti=".preg_replace('/\s+/', '+', $query);
 	$funnet = false;
 	
 	$fil_array = explode("\n", $fil);
@@ -350,10 +232,7 @@ function getCcl($query, $path, $type)
 			else
 				$ccl .= ' or ';
 			//Hvis det stemmer, blir dewey-nummeret lagt i variabelen $ccl, istedenfor standardsøket
-			if ($type!='rss')
-				$ccl .= "ke=".preg_replace('/\s+/', '', $data[1]);
-			else
-				$ccl .= preg_replace('/\s+/', '', $data[1])."/ke";
+			$ccl .= "ke=".preg_replace('/\s+/', '', $data[1]);
 			$funnet = true;
 		}
 	}
