@@ -225,7 +225,8 @@ else if (isset($_GET['place']))
 				
 				$params = array(array('namespace' => '', 'name' => 'url_ext', 'value' => "$geoId&place=$place&type=".$type),
 							array('namespace' => '', 'name' => 'sortBy', 'value' => $sortBy),
-							array('namespace' => '', 'name' => 'order', 'value' => $order));
+							array('namespace' => '', 'name' => 'order', 'value' => $order), 
+							array('namespace' => '', 'name' => 'target', 'value' => "local"));
 		
 				echo transformToHTML($xml, $xsl_url, $params);
 			}
@@ -256,7 +257,8 @@ else if (isset($_GET['place']))
 			//parametere til XSL
 			$params = array(array('namespace' => '', 'name' => 'url_ext', 'value' => "$geoId&place=$place&type=".$type),
 							array('namespace' => '', 'name' => 'sortBy', 'value' => $sortBy),
-							array('namespace' => '', 'name' => 'order', 'value' => $order));
+							array('namespace' => '', 'name' => 'order', 'value' => $order), 
+							array('namespace' => '', 'name' => 'target', 'value' => "local"));
 		
 			//transformerer til HTML
 			echo transformToHTML($xml, $xsl_url, $params);

@@ -56,17 +56,6 @@ function search($search, $limit = 20, $type = 'sru', $order = 'ascending', $sort
 		$nodeList = $xml->getElementsByTagName('record');
 		$hits = $nodeList->length;
 		
-		// TODO: Bør begrense når man søker, ikke etterpå
-		/* Funker ikke. Feilmelding: 
-		Fatal error: Uncaught exception 'DOMException' with message 'Not Found Error' in /home/magnus/public_html/reiseplanlegger/api/mod.stories.php:64 Stack trace: #0 /home/magnus/public_html/reiseplanlegger/api/mod.stories.php(64): DOMNode->removeChild(Object(DOMElement)) #1 /home/magnus/public_html/reiseplanlegger/api/mod.stories.php(11): search('Frankrike', 2, 'z39.50') #2 /home/magnus/public_html/reiseplanlegger/api/index.php(3): include('/home/magnus/pu...') #3 {main} thrown in /home/magnus/public_html/reiseplanlegger/api/mod.stories.php on line 64
-		for ($i=0; $i<=$hits; $i++) {
-		  if ($i > $limit) {
-		    $record = $xml->getElementsByTagName('record')->item($i);
-            $old = $xml->removeChild($record);
-		  }
-		}
-		*/
-		
 		//ingen treff
 		if ($hits==0) 
 		{
@@ -79,7 +68,8 @@ function search($search, $limit = 20, $type = 'sru', $order = 'ascending', $sort
 			
 			$params = array(array('namespace' => '', 'name' => 'url_ext', 'value' => "type=".$type),
 						    array('namespace' => '', 'name' => 'sortBy',  'value' => $sortBy),
-						    array('namespace' => '', 'name' => 'order',   'value' => $order));
+						    array('namespace' => '', 'name' => 'order',   'value' => $order), 
+						    array('namespace' => '', 'name' => 'target',  'value' => "remote")); 
 	
 			echo transformToHTML($xml, $xsl_url, $params);
 		}
