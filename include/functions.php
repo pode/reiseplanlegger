@@ -247,7 +247,7 @@ function getCql($query, $path)
 	//Prøver og åpner filen
 	$fil = file_get_contents($path) or exit("Kunne ikke hente fil... ".$path);
 	//Lager et standardsøk, hvis vi ikke finner et land som stemmer med det i filen, blir denne brukt
-	$cql = "(pode.dewey=914*04 or pode.dewey=915*04 or pode.dewey=916*04 or pode.dewey=917*04 or pode.dewey=918*04 or pode.dewey=919*04) and dc.title=".preg_replace('/\s+/', '+', $query);
+	$cql = "(pode.dewey=914*04 or pode.dewey=915*04 or pode.dewey=916*04 or pode.dewey=917*04 or pode.dewey=918*04 or pode.dewey=919*04) and dc.title=$query";
 	$funnet = false;
 	
 	$fil_array = explode("\n", $fil);
@@ -277,7 +277,7 @@ function getCql($query, $path)
 			$funnet = true;
 		}
 	}
-	return urlencode($cql);
+	return $cql;
 }
 
 /*
@@ -290,6 +290,7 @@ function getSRUURL($query,
                 $version = "1.2",
                 $recordSchema = "marcxml")
 {
+	$query = urlencode($query);
         return "http://torfeus.deich.folkebibl.no:9999/biblios?operation=$operation&version=$version&query=$query&recordSchema=$recordSchema&startRecord=$startRecord&maximumRecords=$maximumRecords";
 }
 

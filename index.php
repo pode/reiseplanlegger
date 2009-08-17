@@ -123,7 +123,8 @@ if (isset($_GET['tittelnr']))
 		$xml_data = str_replace("<record xmlns=\"http://www.loc.gov/MARC21/slim\">", "<record>", $xml_data);
 		
 		//lagrer parametere til XSLT
-		$params = array(array('namespace' => '', 'name' => 'url_ext', 'value' => '&type='.$type));
+		$params = array(array('namespace' => '', 'name' => 'url_ext', 'value' => '&type='.$type), 
+		                array('namespace' => '', 'name' => 'target', 'value' => 'local'));
 		
 		//gjennomfører trans. og skriver ut
 		echo transformToHTML($xml_data, $xsl_url, $params);

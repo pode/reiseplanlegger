@@ -77,10 +77,11 @@ function search($search, $limit = 20, $type = 'sru', $order = 'ascending', $sort
 	//type er SRU
 	else if($type=="sru")
 	{
-		//oppretter cql-spørresetning
-		$cql = getCql($search, "../dewey/dewey_list.txt");
+		
+		$cql = "dc.subject = $search and dc.subject = Fortellinger";
+		
 		//oppretter URL til KOHA med cql
-		$xml_url = getSRUURL($cql);
+		$xml_url = getSRUURL($cql, 1, $limit);
 		//sti til XSL
 		$xsl_url = '../xsl/boklistesru.xsl';
 
@@ -100,7 +101,9 @@ function search($search, $limit = 20, $type = 'sru', $order = 'ascending', $sort
 		//parametere til XSL
 		$params = array(array('namespace' => '', 'name' => 'url_ext', 'value' => "type=".$type),
 						array('namespace' => '', 'name' => 'sortBy',  'value' => $sortBy),
-						array('namespace' => '', 'name' => 'order',   'value' => $order));
+						array('namespace' => '', 'name' => 'order',   'value' => $order), 
+						array('namespace' => '', 'name' => 'target',  'value' => "remote"), 
+						array('namespace' => '', 'name' => 'showHits',  'value' => "false"));
 	
 		//transformerer til HTML
 		echo transformToHTML($xml, $xsl_url, $params);

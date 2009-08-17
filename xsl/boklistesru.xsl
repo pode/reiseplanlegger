@@ -3,6 +3,8 @@
 	<xsl:param name="url_ext"/>
 	<xsl:param name="sortBy"/>
 	<xsl:param name="order"/>
+	<xsl:param name="target"/>
+	<xsl:param name="showHits"/>
 	<xsl:output method="html"/>
 	<xsl:template match="/">
 		<xsl:variable name="hits">
@@ -13,9 +15,11 @@
 				<p>Ingen treff...</p>
 			</xsl:when>
 			<xsl:otherwise>
-				Antall treff: <xsl:value-of select="$hits"/>
+			  <xsl:if test="$showHits='true'">
+			  	Antall treff: <xsl:value-of select="$hits"/>
 				<br/>
 				<br/>
+			  </xsl:if>
 			</xsl:otherwise>
 		</xsl:choose>
 		<xsl:if test="$sortBy='title'">
@@ -27,14 +31,24 @@
 					<xsl:value-of select="$rec/datafield[@tag=999]/subfield[@code='c']"/>
 				</xsl:variable>
 				<!-- Link med tittel som navn på linken -->
-				<a href="?tittelnr={$kohanr}{$url_ext}">
-					<xsl:value-of select="$rec/datafield[@tag=245]/subfield[@code='a']"/>
+				<xsl:if test="$target='remote'">
+				  <a href="http://dev.bibpode.no/cgi-bin/koha/opac-detail.pl?biblionumber={$kohanr}">
+				  <xsl:value-of select="$rec/datafield[@tag=245]/subfield[@code='a']"/>
 					<!-- Henter ut undertittel -->
 					<xsl:for-each select="$rec/datafield[@tag=245]/subfield[@code='b']">
 					: <xsl:value-of select="."/>
 					</xsl:for-each>
-				</a>
-				<br/>
+				  </a><br/>
+				</xsl:if>
+				<xsl:if test="$target='local'">
+				  <a href="?tittelnr={$kohanr}{$url_ext}">
+				  <xsl:value-of select="$rec/datafield[@tag=245]/subfield[@code='a']"/>
+					<!-- Henter ut undertittel -->
+					<xsl:for-each select="$rec/datafield[@tag=245]/subfield[@code='b']">
+					: <xsl:value-of select="."/>
+					</xsl:for-each>
+				  </a><br/>
+				</xsl:if>
 				<!-- Skriver ut utgivelsesinformasjon -->
 				<xsl:choose>
 					<xsl:when test="(string-length($rec/datafield[@tag=260]/subfield[@code='b'])>3)
@@ -66,14 +80,24 @@
 					<xsl:value-of select="$rec/datafield[@tag=999]/subfield[@code='c']"/>
 				</xsl:variable>
 				<!-- Link med tittel som navn på linken -->
-				<a href="?tittelnr={$kohanr}{$url_ext}">
-					<xsl:value-of select="$rec/datafield[@tag=245]/subfield[@code='a']"/>
+				<xsl:if test="$target='remote'">
+				  <a href="http://dev.bibpode.no/cgi-bin/koha/opac-detail.pl?biblionumber={$kohanr}">
+				  <xsl:value-of select="$rec/datafield[@tag=245]/subfield[@code='a']"/>
 					<!-- Henter ut undertittel -->
 					<xsl:for-each select="$rec/datafield[@tag=245]/subfield[@code='b']">
 					: <xsl:value-of select="."/>
 					</xsl:for-each>
-				</a>
-				<br/>
+				  </a><br/>
+				</xsl:if>
+				<xsl:if test="$target='local'">
+				  <a href="?tittelnr={$kohanr}{$url_ext}">
+				  <xsl:value-of select="$rec/datafield[@tag=245]/subfield[@code='a']"/>
+					<!-- Henter ut undertittel -->
+					<xsl:for-each select="$rec/datafield[@tag=245]/subfield[@code='b']">
+					: <xsl:value-of select="."/>
+					</xsl:for-each>
+				  </a><br/>
+				</xsl:if>
 				<!-- Skriver ut utgivelsesinformasjon -->
 				<xsl:choose>
 					<xsl:when test="(string-length($rec/datafield[@tag=260]/subfield[@code='b'])>3)
