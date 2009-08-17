@@ -12,7 +12,7 @@ if (!empty($_GET['country'])) {
 	
 }
 
-function search($search, $limit = 20, $type = 'sru', $order = 'ascending', $sortBy = 'year') {
+function search($search, $limit = 20, $type = 'sru', $order = 'descending', $sortBy = 'year') {
 	
 	/*
 	hvis ikke $type er satt til sru eller z39.50
