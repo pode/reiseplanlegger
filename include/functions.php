@@ -29,8 +29,8 @@ foreach ($options as $a => $b)
 ?>
 		</select>
 		<input type="submit" value="Søk" />
-		<input type="hidden" name="sortBy" value="title" />
-		<input type="hidden" name="order" value="ascending" />
+		<input type="hidden" name="sortBy" value="year" />
+		<input type="hidden" name="order" value="descending" />
 	</p>
 </form>
 <?php
