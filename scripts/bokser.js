@@ -97,6 +97,7 @@ $(function(){
 			                           place: place_nor, 
 			                           country: country_nor, 
 			                           langs: langs, 
+			                           q: getQueryVariable('place'),
 			                           type: getQueryVariable('type')
 			                          },
 			    function(data){
