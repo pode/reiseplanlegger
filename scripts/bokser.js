@@ -67,11 +67,14 @@ $(function(){
     	google.language.translate(place_country, "en", "no", function(result) {
 		  if (!result.error) {
 		    $("#place").find(".widget-content").append("<h3>" + result.translation + "</h3><p>Lokal tid: " + json.localTime + ".</p>");
-		    $("#place").find(".widget-content").append("<p>Språk:</p><ul id=\"lang-list\"></ul>");
+		    
+		    var langs = '';
+		    // $("#place").find(".widget-content").append("<p>Velg språk:</p><ul id=\"lang-list\"></ul>");
 		    jQuery.each($(json.placeInfo.lang), function() {
-			  $("#place").find("#lang-list").append("<li>" + this + "</li>");
+			  // $("#place").find("#lang-list").append("<li>" + this + "</li>");
+			  langs = langs + this + ",";
 		    });
-		    $("#place").find(".widget-content").append("</ul>");
+		    // $("#place").find(".widget-content").append("</ul>");
 		    
 		    // Hent ut navn på sted og land, på norsk
 			var split = result.translation.split(", "); 
@@ -93,6 +96,7 @@ $(function(){
 			                           lon: json.placeInfo.lon, 
 			                           place: place_nor, 
 			                           country: country_nor, 
+			                           langs: langs, 
 			                           type: getQueryVariable('type')
 			                          },
 			    function(data){

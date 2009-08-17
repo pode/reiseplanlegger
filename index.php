@@ -305,6 +305,10 @@ else if (!isset($_GET['about']))
 			    	<div class="widget-header">Fortellinger</div>
                     <div class="widget-content"><img src="images/widgets/loading.gif" alt="Henter data..." /></div>
 				</div>
+				<div class="widget movable collapsable right-col-box" id="widget_language">
+			    	<div class="widget-header">Språkkurs og lærebøker</div>
+                    <div class="widget-content"><img src="images/widgets/loading.gif" alt="Henter data..." /></div>
+				</div>
 				<div class="widget movable collapsable right-col-box" id="widget_weather">
 			    	<div class="widget-header">Været</div>
                     <div class="widget-content"><img src="images/widgets/loading.gif" alt="Henter data..." /></div>

@@ -40,7 +40,7 @@ function z_search($q, $limit = 20, $start = 1, $order = 'descending', $sortBy = 
 function sru_search($q, $limit = 20, $start = 1, $order = 'descending', $sortBy = 'year') {
 		
 	//oppretter URL til KOHA med cql
-	$xml_url = getSRUURL($q, 1, $limit);
+	$xml_url = getSRUURL($q, $start, $limit);
 	//sti til XSL
 	$xsl_url = '../xsl/boklistesru.xsl';
 	
