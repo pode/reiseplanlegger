@@ -1,5 +1,11 @@
 <?php
 
+include_once('../config.php');
+
+if (!$config['modules']['weather']['enabled']) {
+  exit;
+}
+
 //henter været basert på lengde-, breddegrad og tidssone
 $weather = getWeather($_GET['lat'], $_GET['lon'], $_GET['timeZone']);
 

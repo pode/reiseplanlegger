@@ -3,6 +3,9 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL|E_STRICT);
 
+// Inkluderer konfigurasjonen - herfra kommer arrayet $config 
+require_once('config.php');
+
 //inkluderer funksjoner
 require_once 'include/functions.php';
 
@@ -301,30 +304,22 @@ else if (!isset($_GET['about']))
 				<div class="right-col-box" id="place">
                     <div class="widget-content"><img src="images/widgets/loading.gif" alt="Henter data..." /></div>
 				</div>
-				<div class="widget movable collapsable right-col-box" id="widget_snl">
-			    	<div class="widget-header">Store Norske Leksikon</div>
-                    <div class="widget-content"><img src="images/widgets/loading.gif" alt="Henter data..." /></div>
-				</div>
-				<div class="widget movable collapsable right-col-box" id="widget_stories">
-			    	<div class="widget-header">Fortellinger</div>
-                    <div class="widget-content"><img src="images/widgets/loading.gif" alt="Henter data..." /></div>
-				</div>
-				<div class="widget movable collapsable right-col-box" id="widget_language">
-			    	<div class="widget-header">Språkkurs og lærebøker</div>
-                    <div class="widget-content"><img src="images/widgets/loading.gif" alt="Henter data..." /></div>
-				</div>
-				<div class="widget movable collapsable right-col-box" id="widget_weather">
-			    	<div class="widget-header">Været</div>
-                    <div class="widget-content"><img src="images/widgets/loading.gif" alt="Henter data..." /></div>
-				</div>
-				<div class="widget movable collapsable right-col-box" id="widget_map">
-			    	<div class="widget-header">Kart</div>
-                    <div class="widget-content"><img src="images/widgets/loading.gif" alt="Henter data..." /></div>
-				</div>
-				<div class="widget movable collapsable right-col-box" id="widget_debug">
-			    	<div class="widget-header">Debug</div>
-                    <div class="widget-content"><img src="images/widgets/loading.gif" alt="Henter data..." /></div>
-				</div>
+<?php
+
+foreach ($config['modules'] as $key => $mod) {
+
+  if ($mod['enabled']) {
+
+    echo('<div class="widget movable collapsable right-col-box" id="widget_' . $key . '">');
+    echo('	<div class="widget-header">' . $mod['title'] . '</div>');
+    echo('  <div class="widget-content"><img src="images/widgets/loading.gif" alt="Henter data..." /></div>');
+    echo('</div>');
+  
+  }				
+
+}
+
+?>
 				</div>
 								
 				<div id="footer">

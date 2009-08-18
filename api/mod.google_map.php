@@ -1,3 +1,13 @@
+<?php
+
+include_once('../config.php');
+
+if (!$config['modules']['google_map']['enabled']) {
+  exit;
+}
+
+?>
+
 <script type="text/javascript">
 /**
  *Funksjon som tar imot parametre fra søkesiden og skriver ut riktig kart

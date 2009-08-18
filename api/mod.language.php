@@ -1,5 +1,11 @@
 <?php
 
+include_once('../config.php');
+
+if (!$config['modules']['language']['enabled']) {
+  exit;
+}
+
 include_once('../include/functions.php');
 include_once('inc.catalogue.php');
 
@@ -41,9 +47,9 @@ if (!empty($_GET['langs']) && !empty($_GET['type'])) {
 } elseif (!empty($_GET['lang'])) {
 	
   if ($_GET['type'] == 'z39.50') {
-    echo z_search("eo={$_GET['lang']} and (eo=lærebøker or eo=språkkurs)", 5);	
+    echo z_search("eo={$_GET['lang']} and (eo=lærebøker or eo=språkkurs)", $config['modules']['language']['limit']);	
   } else {
-    echo sru_search("dc.subject = {$_GET['lang']} and (dc.subject = lærebøker or dc.subject = språkkurs)", 5);	
+    echo sru_search("dc.subject = {$_GET['lang']} and (dc.subject = lærebøker or dc.subject = språkkurs)", $config['modules']['language']['limit']);	
   }
   
 }
