@@ -29,8 +29,7 @@ if (!empty($_GET['q'])) {
   
   if ($data) {
     foreach ($data->result->list as $item) {
-      echo('<p><a href="http://snl.no/' . $item->link . '">' . $item->title . '</a></p>');
-      echo($item->shortview);
+      echo('<p><a href="http://snl.no/' . $item->link . '">' . $item->title . '</a>, ' . strip_tags($item->shortview) . '</p>');
     }
   }
 	
