@@ -20,6 +20,9 @@ if (!empty($_GET['langs']) && !empty($_GET['type'])) {
 
   function getLanguage(lang) {
 		
+	if (!lang) {
+		lang = document.getElementById("selectLang").options[document.getElementById("selectLang").selectedIndex].text;	
+	}
     $.get("api/index.php", { mod: 'language',
 				             lang: lang, 
 				             type: '<?php echo($_GET['type']); ?>' 
@@ -36,7 +39,7 @@ if (!empty($_GET['langs']) && !empty($_GET['type'])) {
 
   $langs = explode(',', $_GET['langs']);
 
-  echo('<form>'. "\n" . '<select onChange="getLanguage(this.value)">' . "\n" . '<option>Velg språk...</option>' . "\n");
+  echo('<form>'. "\n" . '<select id="selectLang" onChange="getLanguage(selectLang.value)">' . "\n" . '<option>Velg språk...</option>' . "\n");
   foreach($langs as $this_lang) {
   	if ($this_lang != '') {
   	  echo("<option>$this_lang</option>\n");
