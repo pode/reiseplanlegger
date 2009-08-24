@@ -48,7 +48,7 @@ $config['modules']['stories'] = array(
 $config['modules']['snl'] = array(
   'enabled' => true, 
   'title' => "Store norske leksikon", 
-  'limit' => 5,
+  'limit' => 1,
 );
 
 $config['modules']['weather'] = array(
