@@ -73,7 +73,7 @@
 		</xsl:if>
 		<xsl:if test="$sortBy='year'">
 			<xsl:for-each select="//zs:record">
-				<xsl:sort select="zs:recordData/record/datafield[@tag=260]/subfield[@code='c']" data-type="number" order="{$order}"/>
+				<xsl:sort select="translate(zs:recordData/record/datafield[@tag=260]/subfield[@code='c'], 'cop.[]', '')" data-type="number" order="{$order}"/>
 				<xsl:variable name="rec" select="zs:recordData/record"/>
 				<!-- Lagrer kohanr -->
 				<xsl:variable name="kohanr">
@@ -103,7 +103,11 @@
 					<xsl:when test="(string-length($rec/datafield[@tag=260]/subfield[@code='b'])>3)
 												and(string-length($rec/datafield[@tag=260]/subfield[@code='c'])>3)">
 						<xsl:value-of select="$rec/datafield[@tag=260]/subfield[@code='b']"/>, 
-						<xsl:value-of select="$rec/datafield[@tag=260]/subfield[@code='c']"/>
+						<xsl:value-of select="$rec/datafield[@tag=260]/subfield[@code='c']" />
+						<xsl:variable name="year">
+						  <xsl:value-of select="$rec/datafield[@tag=260]/subfield[@code='c']" />
+						</xsl:variable>
+						<xsl:value-of select="translate($rec/datafield[@tag=260]/subfield[@code='c'], 'cop.[]', '')"/> 
 						<br/>
 					</xsl:when>
 					<xsl:otherwise>
