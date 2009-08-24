@@ -16,9 +16,21 @@ Henter ut fortellinger fra katalogen, basert på land
 if (!empty($_GET['country']) && !empty($_GET['type'])) {
 
   if ($_GET['type'] == 'z39.50') {
-  	echo z_search("eo={$_GET['country']} fortellinger", $config['modules']['stories']['limit']);
+
+  	if ($zresult = z_search("eo={$_GET['country']} fortellinger", $config['modules']['stories']['limit'])) {
+  		echo $zresult;
+  	} else {
+  		echo $config['msg']['zero_hits'];	
+  	}
+
   } else {
-  	echo sru_search("dc.subject = {$_GET['country']} and dc.subject = fortellinger", $config['modules']['stories']['limit']);
+
+  	if ($result = sru_search("dc.subject = {$_GET['country']} and dc.subject = fortellinger", $config['modules']['stories']['limit'])) {
+  		echo $result;
+  	} else {
+  		echo $config['msg']['zero_hits'];	
+  	}
+
   }	
 	
 }

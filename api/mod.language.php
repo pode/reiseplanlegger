@@ -57,7 +57,7 @@ if (!empty($_GET['langs']) && !empty($_GET['type'])) {
     	echo $zl_result;
   	}
   	if (!$zs_result && !$zl_result) {
-  		echo "<p>Ingen treff...</p>";
+  		echo $config['msg']['zero_hits'];
   	}
   
   } else {
@@ -71,7 +71,7 @@ if (!empty($_GET['langs']) && !empty($_GET['type'])) {
     	echo $l_result;
   	}
   	if (!$s_result && !$l_result) {
-  		echo "<p>Ingen treff...</p>";
+  		echo $config['msg']['zero_hits'];
   	}
   	
   }

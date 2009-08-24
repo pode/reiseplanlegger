@@ -1,6 +1,12 @@
 <?php
 
 /*
+DIVERSE MELDINGER
+*/
+
+$config['msg']['zero_hits'] = '<p>Ingen treff...</p>';
+
+/*
 MODULER
 
 Moduler konfigureres med et array på formen
