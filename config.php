@@ -24,13 +24,19 @@ dette med en parameter som heter 'limit'.
 $config['modules']['language'] = array(
   'enabled' => true, 
   'title' => "Lærebøker og språkkurs",  
-  'limit' => 7, 
+  'limit' => 5, 
+);
+
+$config['modules']['travel'] = array(
+  'enabled' => true,
+  'title' => "Reiseskildringer",  
+  'limit' => 5, 
 );
 
 $config['modules']['stories'] = array(
   'enabled' => true,
   'title' => "Fortellinger",  
-  'limit' => 7, 
+  'limit' => 5, 
 );
 
 $config['modules']['snl'] = array(
