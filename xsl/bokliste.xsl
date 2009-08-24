@@ -8,7 +8,7 @@
 	<xsl:template match="/">
 		<xsl:if test="$sortBy='title'">
 			<xsl:for-each select="//record">
-				<!-- xsl:sort select="datafield[@tag=245]/subfield[@code='a']" data-type="text" order="{$order}"/ -->
+				<xsl:sort select="datafield[@tag=245]/subfield[@code='a']" data-type="text" order="{$order}"/>
 				<!-- Lagrer tittelnr -->
 				<xsl:variable name="tittelnr">
 					<xsl:value-of select="controlfield[@tag=001]"/>
@@ -58,7 +58,7 @@
 		</xsl:if>
 		<xsl:if test="$sortBy='year'">
 			<xsl:for-each select="//record">
-				<!-- xsl:sort select="datafield[@tag=260]/subfield[@code='c']" data-type="number" order="{$order}"/ -->
+				<xsl:sort select="datafield[@tag=260]/subfield[@code='c']" data-type="number" order="{$order}"/>
 				<!-- Lagrer tittelnr -->
 				<xsl:variable name="tittelnr">
 					<xsl:value-of select="controlfield[@tag=001]"/>

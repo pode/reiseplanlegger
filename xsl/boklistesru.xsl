@@ -24,7 +24,7 @@
 		</xsl:choose>
 		<xsl:if test="$sortBy='title'">
 			<xsl:for-each select="//zs:record">
-				<!-- xsl:sort select="zs:recordData/record/datafield[@tag=245]/subfield[@code='a']" data-type="text" order="{$order}"/ -->
+				<xsl:sort select="zs:recordData/record/datafield[@tag=245]/subfield[@code='a']" data-type="text" order="{$order}"/>
 				<xsl:variable name="rec" select="zs:recordData/record"/>
 				<!-- Lagrer kohanr -->
 				<xsl:variable name="kohanr">
@@ -73,7 +73,7 @@
 		</xsl:if>
 		<xsl:if test="$sortBy='year'">
 			<xsl:for-each select="//zs:record">
-				<!-- xsl:sort select="zs:recordData/record/datafield[@tag=260]/subfield[@code='c']" data-type="number" order="{$order}"/ -->
+				<xsl:sort select="zs:recordData/record/datafield[@tag=260]/subfield[@code='c']" data-type="number" order="{$order}"/>
 				<xsl:variable name="rec" select="zs:recordData/record"/>
 				<!-- Lagrer kohanr -->
 				<xsl:variable name="kohanr">

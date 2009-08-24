@@ -125,6 +125,18 @@ function yazCclArray($ccl, $syntax = 'marc21', $limit = 20, $host = 'z3950.deich
 	}
 	else
 	{
+		// NB! Ser ikke ut som Z39.50 fra Bibliofil støtter "sort"
+		// Se nederst her: http://www.bibsyst.no/produkter/bibliofil/z3950.php
+		// PHP/YAZ-funksjonen yaz-sort ville kunne dratt nytte av dette: 
+		// http://no.php.net/manual/en/function.yaz-sort.php
+		// Sort Flags
+		// a Sort ascending
+		// d Sort descending
+		// i Case insensitive sorting
+		// s Case sensitive sorting
+		// Bib1-attributter man kunne sortert på: 
+		// http://www.bibsyst.no/produkter/bibliofil/z/carl.xml
+		// yaz_sort($id, "1=31 di");
 		$rpn = $cclresult["rpn"];
 		yaz_search($id, "rpn", utf8_decode($rpn));
 	}
