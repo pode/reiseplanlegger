@@ -285,23 +285,27 @@ function getLang($countryCode)
 		
 		if (strtolower($countryInfo[0])==strtolower($countryCode))
 		{
+			// Språk-kodene ligger i kolonne 15
 			$lang_as_string = $countryInfo[15];
 			$langs = explode(",", $lang_as_string);
 			foreach ($langs as $lang) 
 			{
-				// Varianter av feks angis som en-NZ, vi er bare interessert i de to første tegnene
+				// Varianter av feks engelsk angis som en-NZ, vi er bare interessert i de to første tegnene
 				$lang = substr($lang, 0, 2);
 				// Sjekk om dette er et språk vi kjenner til
 				if ($languages[$lang]) 
 				{
-				  $language_names[] = $languages[$lang];
+				  $language_names[$languages[$lang]]++;
 				} 
-				else 
-				{
-				  $language_names[] = "Ukjent språk ($lang)";	
-				}
+				// Skriver bare ut de språkene vi finner i lista vår. 
+				// Andre språk, feks de som har en kode på 3 tegn, er det liten 
+				// sjanse for at vi finner noen språkkurs/lærebøker for. 
+				// else 
+				// {
+				//   $language_names[] = "Ukjent språk ($lang)";	
+				// }
 			}	
-			return $language_names;
+			return array_keys($language_names);
 		}
 	}
 	
