@@ -20,7 +20,7 @@ function z_search($q, $limit = 20, $start = 1, $order = 'descending', $sortBy = 
 	//ingen treff
 	if ($hits==0) 
 	{
-		return "<p>Ingen treff...</p>\n";
+		return false;
 	}
 	//treff, XML blir transformert og skrevet ut
 	else
@@ -57,6 +57,8 @@ function sru_search($q, $limit = 20, $start = 1, $order = 'descending', $sortBy 
 	$nodeList = $xml->getElementsByTagName('recordData');
 	$hits = $nodeList->length;
 	
+	if ($hits > 0) {
+	
 	//parametere til XSL
 	$params = array(array('namespace' => '', 'name' => 'url_ext', 'value' => "type=sru"), // TODO: Brukes denne? 
 					array('namespace' => '', 'name' => 'sortBy',  'value' => $sortBy),
@@ -66,6 +68,12 @@ function sru_search($q, $limit = 20, $start = 1, $order = 'descending', $sortBy 
 	
 	//transformerer til HTML
 	return transformToHTML($xml, $xsl_url, $params);
+
+	} else {
+	
+		return false;
+		
+	}
 
 }
 

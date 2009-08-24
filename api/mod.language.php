@@ -47,9 +47,33 @@ if (!empty($_GET['langs']) && !empty($_GET['type'])) {
 } elseif (!empty($_GET['lang'])) {
 	
   if ($_GET['type'] == 'z39.50') {
-    echo z_search("eo={$_GET['lang']} and (eo=lærebøker or eo=språkkurs)", $config['modules']['language']['limit']);	
+  	
+  	if ($zs_result = z_search("eo={$_GET['lang']} and eo=språkkurs", $config['modules']['language']['limit'])) {
+  		echo "<p>Språkkurs</p>";
+    	echo $zs_result;
+  	}
+  	if ($zl_result = z_search("eo={$_GET['lang']} and eo=lærebøker", $config['modules']['language']['limit'])) {
+    	echo "<p>Lærebøker</p>";
+    	echo $zl_result;
+  	}
+  	if (!$zs_result && !$zl_result) {
+  		echo "<p>Ingen treff...</p>";
+  	}
+  
   } else {
-    echo sru_search("dc.subject = {$_GET['lang']} and (dc.subject = lærebøker or dc.subject = språkkurs)", $config['modules']['language']['limit']);	
+  	
+  	if ($s_result = sru_search("dc.subject = {$_GET['lang']} and dc.subject = språkkurs", $config['modules']['language']['limit'])) {
+  		echo "<p>Språkkurs</p>";
+    	echo $s_result;
+  	}
+  	if ($l_result = sru_search("dc.subject = {$_GET['lang']} and dc.subject = lærebøker", $config['modules']['language']['limit'])) {
+    	echo "<p>Lærebøker</p>";
+    	echo $l_result;
+  	}
+  	if (!$s_result && !$l_result) {
+  		echo "<p>Ingen treff...</p>";
+  	}
+  	
   }
   
 }
