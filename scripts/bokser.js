@@ -103,6 +103,8 @@ $(function(){
 			    function(data){
 			      $("#" + this_widget.id).find(".widget-content").text("");
 			      $("#" + this_widget.id).find(".widget-content").append(data);
+			      // Sørg for å aktivere eventuelle trekkspill
+			  	  $(".trekkspill").accordion({ autoHeight: false, active: false });
 			    });
 			
 			  });

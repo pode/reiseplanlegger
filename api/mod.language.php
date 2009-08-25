@@ -30,6 +30,8 @@ if (!empty($_GET['langs']) && !empty($_GET['type'])) {
 	    function(data){
 	      $("#langsearch").text("");
 	      $("#langsearch").append(data);
+	      // Sørg for å aktivere eventuelle trekkspill
+			  	  $(".trekkspill").accordion({ autoHeight: false, active: false });
 	});
 		
   }

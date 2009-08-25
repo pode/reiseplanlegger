@@ -31,7 +31,14 @@ $header_extras[] = '<script src="http://www.google.com/jsapi"></script>
   google.load("language", "1"); 
 </script>
 <script src="scripts/jquery.easywidgets.min.js" type="text/javascript"></script>
-<script src="scripts/bokser.js" type="text/javascript"></script>';
+<script src="scripts/bokser.js" type="text/javascript"></script>
+<script type="text/javascript" src="http://jqueryui.com/latest/ui/ui.accordion.js"></script>
+  <script type="text/javascript">
+  $(document).ready(function(){
+    $(".trekkspill").accordion({ autoHeight: false, active: false });
+  });
+  </script>
+';
 
 //forteller hvilken filtype (MIME) og tegnsett som skal brukes
 header('Content-Type: text/html; Extension: xhtml; charset=utf-8');
