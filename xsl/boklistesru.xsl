@@ -16,9 +16,7 @@
 			</xsl:when>
 			<xsl:otherwise>
 			  <xsl:if test="$showHits='true'">
-			  	Antall treff: <xsl:value-of select="$hits"/>
-				<br/>
-				<br/>
+			  	<p>Antall treff: <xsl:value-of select="$hits"/></p>
 			  </xsl:if>
 			</xsl:otherwise>
 		</xsl:choose>
@@ -28,6 +26,7 @@
 				<xsl:sort select="zs:recordData/record/datafield[@tag=245]/subfield[@code='a']" data-type="text" order="{$order}"/>
 				<xsl:sort select="zs:recordData/record/datafield[@tag=245]/subfield[@code='b']" data-type="text" order="{$order}"/>
 				<xsl:sort select="translate(zs:recordData/record/datafield[@tag=260]/subfield[@code='c'], 'cop.[]', '')" data-type="number" order="descending"/>
+				<p>
 				<xsl:variable name="rec" select="zs:recordData/record"/>
 				<!-- Lagrer kohanr -->
 				<xsl:variable name="kohanr">
@@ -72,25 +71,23 @@
 												and(string-length($rec/datafield[@tag=260]/subfield[@code='c'])>3)">
 						<xsl:value-of select="$rec/datafield[@tag=260]/subfield[@code='b']"/>, 
 						<xsl:value-of select="translate($rec/datafield[@tag=260]/subfield[@code='c'], 'cop.[]', '')"/>
-						<br/>
 					</xsl:when>
 					<xsl:otherwise>
 							<xsl:if test="string-length($rec/datafield[@tag=260]/subfield[@code='b'])>3">
 								<xsl:value-of select="$rec/datafield[@tag=260]/subfield[@code='b']"/>
-								<br/>
 							</xsl:if>
 							<xsl:if test="string-length($rec/datafield[@tag=260]/subfield[@code='c'])>3">
 								<xsl:value-of select="translate($rec/datafield[@tag=260]/subfield[@code='c'], 'cop.[]', '')"/>
-								<br/>
 							</xsl:if>
 					</xsl:otherwise>
 				</xsl:choose>
-				<br/>
+				</p>
 			</xsl:for-each>
 		</xsl:if>
 		<xsl:if test="$sortBy='year'">
 			<xsl:for-each select="//zs:record">
 				<xsl:sort select="translate(zs:recordData/record/datafield[@tag=260]/subfield[@code='c'], 'cop.[]', '')" data-type="number" order="{$order}"/>
+				<p>
 				<xsl:variable name="rec" select="zs:recordData/record"/>
 				<!-- Lagrer kohanr -->
 				<xsl:variable name="kohanr">
@@ -127,7 +124,7 @@
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:for-each>)
-				</xsl:if>
+				</xsl:if> 
 				<br/>
 				<!-- Skriver ut utgivelsesinformasjon -->
 				<xsl:choose>
@@ -135,20 +132,17 @@
 												and(string-length($rec/datafield[@tag=260]/subfield[@code='c'])>3)">
 						<xsl:value-of select="$rec/datafield[@tag=260]/subfield[@code='b']"/>, 
 						<xsl:value-of select="translate($rec/datafield[@tag=260]/subfield[@code='c'], 'cop.[]', '')"/> 
-						<br/>
 					</xsl:when>
 					<xsl:otherwise>
 							<xsl:if test="string-length($rec/datafield[@tag=260]/subfield[@code='b'])>3">
 								<xsl:value-of select="$rec/datafield[@tag=260]/subfield[@code='b']"/>
-								<br/>
 							</xsl:if>
 							<xsl:if test="string-length($rec/datafield[@tag=260]/subfield[@code='c'])>3">
 								<xsl:value-of select="translate($rec/datafield[@tag=260]/subfield[@code='c'], 'cop.[]', '')"/>
-								<br/>
 							</xsl:if>
 					</xsl:otherwise>
 				</xsl:choose>
-				<br/>
+				</p>
 			</xsl:for-each>
 		</xsl:if>
 	</xsl:template>

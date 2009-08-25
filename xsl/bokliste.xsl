@@ -16,6 +16,7 @@
 				<xsl:variable name="tittelnr">
 					<xsl:value-of select="controlfield[@tag=001]"/>
 				</xsl:variable>
+				<p>
 				<!-- Link med tittel som navn på linken -->
 				<xsl:if test="$target='remote'">
 				  <a href="http://www.deich.folkebibl.no/cgi-bin/websok?mode=p&amp;st=p&amp;tnr={$tittelnr}">
@@ -55,22 +56,19 @@
 												and(string-length(datafield[@tag=260]/subfield[@code='c'])>0))">
 						<xsl:value-of select="datafield[@tag=260]/subfield[@code='b']"/>, 
 						<xsl:value-of select="translate(datafield[@tag=260]/subfield[@code='c'], 'cop.[]', '')"/>
-						<br/>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:choose>
 							<xsl:when test="string-length(datafield[@tag=260]/subfield[@code='b'])>0">
 								<xsl:value-of select="datafield[@tag=260]/subfield[@code='b']"/>
-								<br/>
 							</xsl:when>
 							<xsl:otherwise>
 								<xsl:value-of select="translate(datafield[@tag=260]/subfield[@code='c'], 'cop.[]', '')"/>
-								<br/>
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:otherwise>
 				</xsl:choose>
-				<br/>
+				</p>
 			</xsl:for-each>
 		</xsl:if>
 		<xsl:if test="$sortBy='year'">
@@ -80,6 +78,7 @@
 				<xsl:variable name="tittelnr">
 					<xsl:value-of select="controlfield[@tag=001]"/>
 				</xsl:variable>
+				<p>
 				<!-- Link med tittel som navn på linken -->
 				<xsl:if test="$target='remote'">
 				  <a href="http://www.deich.folkebibl.no/cgi-bin/websok?mode=p&amp;st=p&amp;tnr={$tittelnr}">
@@ -119,20 +118,17 @@
 												and(string-length(datafield[@tag=260]/subfield[@code='c'])>0)">
 						<xsl:value-of select="datafield[@tag=260]/subfield[@code='b']"/>, 
 						<xsl:value-of select="translate(datafield[@tag=260]/subfield[@code='c'], 'cop.[]', '')"/>
-						<br/>
 					</xsl:when>
 					<xsl:otherwise>
 							<xsl:if test="string-length(datafield[@tag=260]/subfield[@code='b'])>0">
 								<xsl:value-of select="datafield[@tag=260]/subfield[@code='b']"/>
-								<br/>
 							</xsl:if>
 							<xsl:if test="string-length(datafield[@tag=260]/subfield[@code='c'])>0">
 								<xsl:value-of select="translate(datafield[@tag=260]/subfield[@code='c'], 'cop.[]', '')"/>
-								<br/>
 							</xsl:if>
 					</xsl:otherwise>
 				</xsl:choose>
-				<br/>
+				</p>
 			</xsl:for-each>
 		</xsl:if>
 	</xsl:template>
