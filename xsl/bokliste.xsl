@@ -37,7 +37,7 @@
 					<xsl:when test="((string-length(datafield[@tag=260]/subfield[@code='b'])>0)
 												and(string-length(datafield[@tag=260]/subfield[@code='c'])>0))">
 						<xsl:value-of select="datafield[@tag=260]/subfield[@code='b']"/>, 
-						<xsl:value-of select="datafield[@tag=260]/subfield[@code='c']"/>
+						<xsl:value-of select="translate(datafield[@tag=260]/subfield[@code='c'], 'cop.[]', '')"/>
 						<br/>
 					</xsl:when>
 					<xsl:otherwise>
@@ -47,7 +47,7 @@
 								<br/>
 							</xsl:when>
 							<xsl:otherwise>
-								<xsl:value-of select="datafield[@tag=260]/subfield[@code='c']"/>
+								<xsl:value-of select="translate(datafield[@tag=260]/subfield[@code='c'], 'cop.[]', '')"/>
 								<br/>
 							</xsl:otherwise>
 						</xsl:choose>
@@ -87,7 +87,7 @@
 					<xsl:when test="(string-length(datafield[@tag=260]/subfield[@code='b'])>0)
 												and(string-length(datafield[@tag=260]/subfield[@code='c'])>0)">
 						<xsl:value-of select="datafield[@tag=260]/subfield[@code='b']"/>, 
-						<xsl:value-of select="datafield[@tag=260]/subfield[@code='c']"/>
+						<xsl:value-of select="translate(datafield[@tag=260]/subfield[@code='c'], 'cop.[]', '')"/>
 						<br/>
 					</xsl:when>
 					<xsl:otherwise>
@@ -96,7 +96,7 @@
 								<br/>
 							</xsl:if>
 							<xsl:if test="string-length(datafield[@tag=260]/subfield[@code='c'])>0">
-								<xsl:value-of select="datafield[@tag=260]/subfield[@code='c']"/>
+								<xsl:value-of select="translate(datafield[@tag=260]/subfield[@code='c'], 'cop.[]', '')"/>
 								<br/>
 							</xsl:if>
 					</xsl:otherwise>

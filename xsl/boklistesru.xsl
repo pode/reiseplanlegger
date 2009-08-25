@@ -54,7 +54,7 @@
 					<xsl:when test="(string-length($rec/datafield[@tag=260]/subfield[@code='b'])>3)
 												and(string-length($rec/datafield[@tag=260]/subfield[@code='c'])>3)">
 						<xsl:value-of select="$rec/datafield[@tag=260]/subfield[@code='b']"/>, 
-						<xsl:value-of select="$rec/datafield[@tag=260]/subfield[@code='c']"/>
+						<xsl:value-of select="translate($rec/datafield[@tag=260]/subfield[@code='c'], 'cop.[]', '')"/>
 						<br/>
 					</xsl:when>
 					<xsl:otherwise>
@@ -63,7 +63,7 @@
 								<br/>
 							</xsl:if>
 							<xsl:if test="string-length($rec/datafield[@tag=260]/subfield[@code='c'])>3">
-								<xsl:value-of select="$rec/datafield[@tag=260]/subfield[@code='c']"/>
+								<xsl:value-of select="translate($rec/datafield[@tag=260]/subfield[@code='c'], 'cop.[]', '')"/>
 								<br/>
 							</xsl:if>
 					</xsl:otherwise>
@@ -103,10 +103,6 @@
 					<xsl:when test="(string-length($rec/datafield[@tag=260]/subfield[@code='b'])>3)
 												and(string-length($rec/datafield[@tag=260]/subfield[@code='c'])>3)">
 						<xsl:value-of select="$rec/datafield[@tag=260]/subfield[@code='b']"/>, 
-						<xsl:value-of select="$rec/datafield[@tag=260]/subfield[@code='c']" />
-						<xsl:variable name="year">
-						  <xsl:value-of select="$rec/datafield[@tag=260]/subfield[@code='c']" />
-						</xsl:variable>
 						<xsl:value-of select="translate($rec/datafield[@tag=260]/subfield[@code='c'], 'cop.[]', '')"/> 
 						<br/>
 					</xsl:when>
@@ -116,7 +112,7 @@
 								<br/>
 							</xsl:if>
 							<xsl:if test="string-length($rec/datafield[@tag=260]/subfield[@code='c'])>3">
-								<xsl:value-of select="$rec/datafield[@tag=260]/subfield[@code='c']"/>
+								<xsl:value-of select="translate($rec/datafield[@tag=260]/subfield[@code='c'], 'cop.[]', '')"/>
 								<br/>
 							</xsl:if>
 					</xsl:otherwise>
