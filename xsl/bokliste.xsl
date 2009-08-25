@@ -8,7 +8,10 @@
 	<xsl:template match="/">
 		<xsl:if test="$sortBy='title'">
 			<xsl:for-each select="//record">
+				<!-- Sorter etter hovedtittel, deretter undertittel, deretter år -->
 				<xsl:sort select="datafield[@tag=245]/subfield[@code='a']" data-type="text" order="{$order}"/>
+				<xsl:sort select="datafield[@tag=245]/subfield[@code='b']" data-type="text" order="{$order}"/>
+				<xsl:sort select="translate(datafield[@tag=260]/subfield[@code='c'], 'cop.[]', '')" data-type="number" order="descending"/>
 				<!-- Lagrer tittelnr -->
 				<xsl:variable name="tittelnr">
 					<xsl:value-of select="controlfield[@tag=001]"/>
@@ -21,7 +24,7 @@
 					<xsl:for-each select="datafield[@tag=245]/subfield[@code='b']">
 					: <xsl:value-of select="."/>
 					</xsl:for-each>
-				  </a><br/>
+				  </a>
 				</xsl:if>
 				<xsl:if test="$target='local'">
 				  <a href="?tittelnr={$tittelnr}{$url_ext}">
@@ -30,8 +33,22 @@
 					<xsl:for-each select="datafield[@tag=245]/subfield[@code='b']">
 					: <xsl:value-of select="."/>
 					</xsl:for-each>
-				  </a><br/>
+				  </a>
 				</xsl:if>
+				<!-- Skriver ut serie -->
+				<xsl:if test="string-length(datafield[@tag=440]/subfield[@code='a']) > 1">
+					(<xsl:for-each select="datafield[@tag=440]/subfield[@code='a']">
+						<xsl:choose>
+							<xsl:when test="position()=last()">
+								<xsl:value-of select="."/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="."/>, 
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:for-each>)
+				</xsl:if>
+				<br/>
 				<!-- Skriver ut utgivelsesinformasjon -->
 				<xsl:choose>
 					<xsl:when test="((string-length(datafield[@tag=260]/subfield[@code='b'])>0)
@@ -71,7 +88,7 @@
 					<xsl:for-each select="datafield[@tag=245]/subfield[@code='b']">
 					: <xsl:value-of select="."/>
 					</xsl:for-each>
-				  </a><br/>
+				  </a>
 				</xsl:if>
 				<xsl:if test="$target='local'">
 				  <a href="?tittelnr={$tittelnr}{$url_ext}">
@@ -80,8 +97,22 @@
 					<xsl:for-each select="datafield[@tag=245]/subfield[@code='b']">
 					: <xsl:value-of select="."/>
 					</xsl:for-each>
-				  </a><br/>
+				  </a>
 				</xsl:if>
+				<!-- Skriver ut serie -->
+				<xsl:if test="string-length(datafield[@tag=440]/subfield[@code='a']) > 1">
+					(<xsl:for-each select="datafield[@tag=440]/subfield[@code='a']">
+						<xsl:choose>
+							<xsl:when test="position()=last()">
+								<xsl:value-of select="."/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="."/>, 
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:for-each>)
+				</xsl:if>
+				<br/>
 				<!-- Skriver ut utgivelsesinformasjon -->
 				<xsl:choose>
 					<xsl:when test="(string-length(datafield[@tag=260]/subfield[@code='b'])>0)
