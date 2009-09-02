@@ -86,12 +86,12 @@
 	<br/>
 	<!-- Utgave -->
 	<xsl:if test="string-length($rec/datafield[@tag=250]/subfield[@code='a'])>0">
-			Utgave: <xsl:value-of select="$rec/datafield[@tag=250]/subfield[@code='a']"/>
+		Utgave: <xsl:value-of select="$rec/datafield[@tag=250]/subfield[@code='a']"/>
 		<br/>
 	</xsl:if>
 	<!-- Skriver ut språk -->
 	<xsl:if test="string-length($rec/datafield[@tag=041]/subfield[@code='h'])>0">
-			Språk: <xsl:value-of select="$rec/datafield[@tag=041]/subfield[@code='h']"/>
+		Språk: <xsl:value-of select="$rec/datafield[@tag=041]/subfield[@code='h']"/>
 		<br/>
 	</xsl:if>
 	<!-- Skriver ut ISBN hvis den er større enn 0 -->
@@ -99,7 +99,7 @@
 		<xsl:value-of select="$rec/datafield[@tag=020]/subfield[@code='a']"/>
 	</xsl:variable>
 	<xsl:if test="string-length($isbn)>0">
-			ISBN: <xsl:value-of select="$isbn"/>
+		ISBN: <xsl:value-of select="$isbn"/>
 		<br/>
 	</xsl:if>
 	<!-- Skriver ut emner -->
@@ -114,18 +114,23 @@
 			<br/>
 		</xsl:for-each>
 	</xsl:if>
-	<a href="http://torfeus.deich.folkebibl.no/cgi-bin/koha/opac-detail.pl?biblionumber={$kohanr}">Vis i katalogen</a>
-	<br/>
-	<!-- Skriver ut omslag fra Open Library hvis det finnes -->
-	<xsl:if test="$visBilde">
-		<xsl:if test="string-length($isbn)>0">
-			<xsl:variable name="imgisbn">
-				<xsl:value-of select="translate($isbn, '-', '')"/>
-			</xsl:variable>
-			<img alt="" src="http://covers.openlibrary.org/b/isbn/{$imgisbn}-M.jpg"/>
-		</xsl:if>
-	</xsl:if>
 	
+</xsl:template>
+
+<xsl:template name="visForsideBilde">
+
+	<xsl:param name="rec"/>
+
+	<xsl:variable name="isbn">
+		<xsl:value-of select="$rec/datafield[@tag=020]/subfield[@code='a']"/>
+	</xsl:variable>
+	<xsl:if test="string-length($isbn)>0">
+		<xsl:variable name="imgisbn">
+			<xsl:value-of select="translate($isbn, '-', '')"/>
+		</xsl:variable>
+		<br /><br /><img alt="" src="http://covers.openlibrary.org/b/isbn/{$imgisbn}-M.jpg"/>
+	</xsl:if>
+
 </xsl:template>
 
 </xsl:stylesheet>

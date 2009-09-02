@@ -1,228 +1,147 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:zs="http://www.loc.gov/zing/srw/">
-	<xsl:param name="url_ext"/>
-	<xsl:param name="sortBy"/>
-	<xsl:param name="order"/>
-	<xsl:param name="target"/>
-	<xsl:param name="showHits"/>
-	<xsl:output method="html"/>
-	<xsl:template match="/">
-		<xsl:variable name="hits">
-			<xsl:value-of select="//zs:numberOfRecords"/>
-		</xsl:variable>
-		<xsl:choose>
-			<xsl:when test="$hits=0">
-				<p>Ingen treff...</p>
-			</xsl:when>
-			<xsl:otherwise>
-			  <xsl:if test="$showHits='true'">
-			  	<p>Antall treff: <xsl:value-of select="$hits"/></p>
-			  </xsl:if>
-			</xsl:otherwise>
-		</xsl:choose>
-		<div class="trekkspill">
-		<xsl:if test="$sortBy='title'">
-			<xsl:for-each select="//zs:record">
+
+<xsl:param name="url_ext"/>
+<xsl:param name="sortBy"/>
+<xsl:param name="order"/>
+<xsl:param name="target"/>
+<xsl:param name="showHits"/>
+<xsl:param name="visForfatter"/>
+<xsl:output method="html"/>
+
+<xsl:include href="felles.xsl"/>
+
+<xsl:template match="/">
+	
+	<!-- ANTALL TREFF -->
+	<xsl:variable name="hits">
+		<xsl:value-of select="//zs:numberOfRecords"/>
+	</xsl:variable>
+	<xsl:choose>
+		<!-- Vis altid 0 treff -->
+		<xsl:when test="$hits=0">
+			<p>Ingen treff...</p>
+		</xsl:when>
+		<xsl:otherwise>
+			<!-- Vis antall terff bare dersom det spørres etter det. -->
+		  <xsl:if test="$showHits='true'">
+		  	<p>Antall treff: <xsl:value-of select="$hits"/></p>
+		  </xsl:if>
+		</xsl:otherwise>
+	</xsl:choose>
+	
+	<xsl:choose>
+		<xsl:when test="$sortBy='title'">
+			<xsl:apply-templates select="//zs:record">
 				<!-- Sorter etter hovedtittel, deretter undertittel, deretter år -->
 				<xsl:sort select="zs:recordData/record/datafield[@tag=245]/subfield[@code='a']" data-type="text" order="{$order}"/>
 				<xsl:sort select="zs:recordData/record/datafield[@tag=245]/subfield[@code='b']" data-type="text" order="{$order}"/>
 				<xsl:sort select="translate(zs:recordData/record/datafield[@tag=260]/subfield[@code='c'], 'cop.[]', '')" data-type="number" order="descending"/>
-				<p>
-				<xsl:variable name="rec" select="zs:recordData/record"/>
-				<!-- Lagrer kohanr -->
-				<xsl:variable name="kohanr">
-					<xsl:value-of select="$rec/datafield[@tag=999]/subfield[@code='c']"/>
-				</xsl:variable>
-				<!-- Link med tittel som navn på linken -->
-				<xsl:if test="$target='remote'">
-				  <a href="http://dev.bibpode.no/cgi-bin/koha/opac-detail.pl?biblionumber={$kohanr}">
-				  <xsl:value-of select="$rec/datafield[@tag=245]/subfield[@code='a']"/>
-					<!-- Henter ut undertittel -->
-					<xsl:for-each select="$rec/datafield[@tag=245]/subfield[@code='b']">
-					: <xsl:value-of select="."/>
-					</xsl:for-each>
-				  </a>
-				</xsl:if>
-				<xsl:if test="$target='local'">
-				  <a href="?tittelnr={$kohanr}{$url_ext}">
-				  <xsl:value-of select="$rec/datafield[@tag=245]/subfield[@code='a']"/>
-					<!-- Henter ut undertittel -->
-					<xsl:for-each select="$rec/datafield[@tag=245]/subfield[@code='b']">
-					: <xsl:value-of select="."/>
-					</xsl:for-each>
-				  </a>
-				</xsl:if>
-				<!-- Skriver ut serie -->
-				<xsl:if test="string-length($rec/datafield[@tag=440]/subfield[@code='a']) > 1">
-					(<xsl:for-each select="$rec/datafield[@tag=440]/subfield[@code='a']">
-						<xsl:choose>
-							<xsl:when test="position()=last()">
-								<xsl:value-of select="."/>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="."/>, 
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:for-each>)
-				</xsl:if>
-				<br/>
-				<!-- Skriver ut utgivelsesinformasjon -->
-				<xsl:choose>
-					<xsl:when test="(string-length($rec/datafield[@tag=260]/subfield[@code='b'])>3)
-												and(string-length($rec/datafield[@tag=260]/subfield[@code='c'])>3)">
-						<xsl:value-of select="$rec/datafield[@tag=260]/subfield[@code='b']"/>, 
-						<xsl:value-of select="translate($rec/datafield[@tag=260]/subfield[@code='c'], 'cop.[]', '')"/>
-					</xsl:when>
-					<xsl:otherwise>
-							<xsl:if test="string-length($rec/datafield[@tag=260]/subfield[@code='b'])>3">
-								<xsl:value-of select="$rec/datafield[@tag=260]/subfield[@code='b']"/>
-							</xsl:if>
-							<xsl:if test="string-length($rec/datafield[@tag=260]/subfield[@code='c'])>3">
-								<xsl:value-of select="translate($rec/datafield[@tag=260]/subfield[@code='c'], 'cop.[]', '')"/>
-							</xsl:if>
-					</xsl:otherwise>
-				</xsl:choose>
-				</p>
-			</xsl:for-each>
-		</xsl:if>
-		<xsl:if test="$sortBy='year'">
-			<xsl:for-each select="//zs:record">
+			</xsl:apply-templates>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:apply-templates select="//zs:record">
+				<!-- Sorter etter år, etter at "cop." og "[]" er fjernet. -->
 				<xsl:sort select="translate(zs:recordData/record/datafield[@tag=260]/subfield[@code='c'], 'cop.[]', '')" data-type="number" order="{$order}"/>
-				<xsl:variable name="rec" select="zs:recordData/record"/>
-				<!-- Lagrer kohanr -->
-				<xsl:variable name="kohanr">
-					<xsl:value-of select="$rec/datafield[@tag=999]/subfield[@code='c']"/>
-				</xsl:variable>
-				<p>
-				<!-- Link med tittel som navn på linken -->
-				<xsl:if test="$target='remote'">
-				  <a href="#">
-				  <xsl:value-of select="$rec/datafield[@tag=245]/subfield[@code='a']"/>
-					<!-- Henter ut undertittel -->
-					<xsl:for-each select="$rec/datafield[@tag=245]/subfield[@code='b']">
-					: <xsl:value-of select="."/>
-					</xsl:for-each>
-				  </a>
-				</xsl:if>
-				<xsl:if test="$target='local'">
-				  <a href="#">
-				  <xsl:value-of select="$rec/datafield[@tag=245]/subfield[@code='a']"/>
-					<!-- Henter ut undertittel -->
-					<xsl:for-each select="$rec/datafield[@tag=245]/subfield[@code='b']">
-					: <xsl:value-of select="."/>
-					</xsl:for-each>
-				  </a>
-				</xsl:if>
-				<!-- Skriver ut serie -->
-				<xsl:if test="string-length($rec/datafield[@tag=440]/subfield[@code='a']) > 1">
-					(<xsl:for-each select="$rec/datafield[@tag=440]/subfield[@code='a']">
-						<xsl:choose>
-							<xsl:when test="position()=last()">
-								<xsl:value-of select="."/>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="."/>, 
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:for-each>)
-				</xsl:if> 
-				</p><p>
-				<!-- Skriver ut utgivelsesinformasjon -->
-				
-				<!-- ### Fra boksruxsl ### -->
-				
-				<!-- Henter 245 $c -->
-				Opplysninger: <xsl:value-of select="$rec/datafield[@tag=245]/subfield[@code='c']"/>, 
-				<!-- Henter 300 $a -->
-			<xsl:value-of select="$rec/datafield[@tag=300]/subfield[@code='a']"/>
-			<br/>
-			<!-- Henter ut forfatter fra post 100 $a og skriver den ut hvis den er større enn 0 -->
-			<xsl:if test="(string-length($rec/datafield[@tag=100]/subfield[@code='a'])>0)
-					or(string-length($rec/datafield[@tag=700]/subfield[@code='a'])>0)">
-					Medvirkende: 
-					<xsl:if test="string-length($rec/datafield[@tag=100]/subfield[@code='a'])>0">
-					<xsl:value-of select="$rec/datafield[@tag=100]/subfield[@code='a']"/>
-					<br/>
-				</xsl:if>
-				<!-- Henter ut post 700 $a og $e -->
-				<xsl:for-each select="$rec/datafield[@tag=700]">
-					<xsl:if test="string-length(subfield[@code='a'])>0">
-						<xsl:value-of select="subfield[@code='a']"/>
-						<xsl:if test="string-length(subfield[@code='e'])>0">
-								(<xsl:value-of select="subfield[@code='e']"/>)
-							</xsl:if>
-						<br/>
-					</xsl:if>
-				</xsl:for-each>
-			</xsl:if>
-			<!-- Skriver ut utgivelsesinformasjon -->
-				Utgitt: <xsl:value-of select="$rec/datafield[@tag=260]/subfield[@code='a']"/>, 
-				<xsl:value-of select="$rec/datafield[@tag=260]/subfield[@code='b']"/>, 
-				<xsl:value-of select="$rec/datafield[@tag=260]/subfield[@code='c']"/>
-			<br/>
-			<!-- Utgave -->
-			<xsl:if test="string-length($rec/datafield[@tag=250]/subfield[@code='a'])>0">
-					Utgave: <xsl:value-of select="$rec/datafield[@tag=250]/subfield[@code='a']"/>
-				<br/>
-			</xsl:if>
-			<!-- Skriver ut språk -->
-			<xsl:if test="string-length($rec/datafield[@tag=041]/subfield[@code='h'])>0">
-					Språk: <xsl:value-of select="$rec/datafield[@tag=041]/subfield[@code='h']"/>
-				<br/>
-			</xsl:if>
-			<!-- Skriver ut ISBN hvis den er større enn 0 -->
-			<xsl:variable name="isbn">
-				<xsl:value-of select="$rec/datafield[@tag=020]/subfield[@code='a']"/>
-			</xsl:variable>
-			<xsl:if test="string-length($isbn)>0">
-					ISBN: <xsl:value-of select="$isbn"/>
-				<br/>
-			</xsl:if>
-			<!-- Skriver ut emner -->
-			<xsl:if test="string-length($rec/datafield[@tag=650])>0">
-					Emner: 
-				<xsl:for-each select="$rec/datafield[@tag=650]">
-					<xsl:value-of select="subfield[@code='a']"/>
-					<xsl:if test="string-length(subfield[@code='x'])>0">
-						<xsl:text>, </xsl:text>
-						<xsl:value-of select="subfield[@code='x']"/>
-					</xsl:if>
-					<br/>
-				</xsl:for-each>
-			</xsl:if>
-			<a href="http://torfeus.deich.folkebibl.no/cgi-bin/koha/opac-detail.pl?biblionumber={$kohanr}">Vis i katalogen</a>
-			<!-- Skriver ut omslag fra Open Library hvis det finnes 
-			<xsl:if test="string-length($isbn)>0">
-				<xsl:variable name="imgisbn">
-					<xsl:value-of select="translate($isbn, '-', '')"/>
-				</xsl:variable>
-				<img alt="" src="http://covers.openlibrary.org/b/isbn/{$imgisbn}-M.jpg"/>
-			</xsl:if>
-			-->
-			
-			<!-- ### SLUTT på kopi fra boksru.xsl ### -->
-				
-				
-				<!--
-				<xsl:choose>
-					<xsl:when test="(string-length($rec/datafield[@tag=260]/subfield[@code='b'])>3)
-												and(string-length($rec/datafield[@tag=260]/subfield[@code='c'])>3)">
-						<xsl:value-of select="$rec/datafield[@tag=260]/subfield[@code='b']"/>, 
-						<xsl:value-of select="translate($rec/datafield[@tag=260]/subfield[@code='c'], 'cop.[]', '')"/> 
-					</xsl:when>
-					<xsl:otherwise>
-							<xsl:if test="string-length($rec/datafield[@tag=260]/subfield[@code='b'])>3">
-								<xsl:value-of select="$rec/datafield[@tag=260]/subfield[@code='b']"/>
-							</xsl:if>
-							<xsl:if test="string-length($rec/datafield[@tag=260]/subfield[@code='c'])>3">
-								<xsl:value-of select="translate($rec/datafield[@tag=260]/subfield[@code='c'], 'cop.[]', '')"/>
-							</xsl:if>
-					</xsl:otherwise>
-				</xsl:choose>
-				-->
-				</p>
-			</xsl:for-each>
+			</xsl:apply-templates>
+		</xsl:otherwise>
+	</xsl:choose>
+
+</xsl:template>
+
+<xsl:template match="//zs:record">
+
+		<!-- Lagrer kohanr -->
+		<xsl:variable name="rec" select="zs:recordData/record"/>
+		<xsl:variable name="kohanr">
+			<xsl:value-of select="$rec/datafield[@tag=999]/subfield[@code='c']"/>
+		</xsl:variable>
+	
+		<xsl:choose>
+			<xsl:when test="$target='remote'">
+				<div class="trekkspill">
+					<xsl:call-template name="ekstern-lenke-trekkspill">
+						<xsl:with-param name="kohanr" select="$kohanr"/>
+						<xsl:with-param name="rec" select="$rec"/>
+					</xsl:call-template>
+				</div>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:call-template name="intern-lenke">
+					<xsl:with-param name="kohanr" select="$kohanr"/>
+					<xsl:with-param name="rec" select="$rec"/>
+				</xsl:call-template>
+			</xsl:otherwise>
+		</xsl:choose>
+
+</xsl:template>
+
+<xsl:template name="intern-lenke">
+
+	<xsl:param name="kohanr"/>
+	<xsl:param name="rec"/>
+
+	<p>
+	<a href="?tittelnr={$kohanr}{$url_ext}">
+	<xsl:value-of select="$rec/datafield[@tag=245]/subfield[@code='a']"/>
+	<!-- Henter ut undertittel -->
+	<xsl:call-template name="undertittel">
+		<xsl:with-param name="rec" select="$rec"/>
+	</xsl:call-template>
+	</a>
+	<!-- Skriver ut serie -->
+	<xsl:call-template name="serie">
+		<xsl:with-param name="rec" select="$rec"/>
+	</xsl:call-template>
+	<br />
+	<!-- Skriver ut utgivelsesinformasjon -->
+	<xsl:call-template name="utgivelse">
+		<xsl:with-param name="rec" select="$rec"/>
+	</xsl:call-template>
+	</p>
+
+</xsl:template>
+
+<xsl:template name="ekstern-lenke-trekkspill">
+
+	<xsl:param name="kohanr"/>
+	<xsl:param name="rec"/>
+
+	<p>
+	<a href="#">
+	<xsl:value-of select="$rec/datafield[@tag=245]/subfield[@code='a']"/>
+	<!-- Henter ut undertittel -->
+	<xsl:call-template name="undertittel">
+		<xsl:with-param name="rec" select="$rec"/>
+	</xsl:call-template>
+	</a>
+	<!-- Skriver ut forfatter -->
+	<xsl:if test="$visForfatter">
+		<xsl:if test="string-length($rec/datafield[@tag=100]/subfield[@code='a'])>0">
+		<xsl:value-of select="$rec/datafield[@tag=100]/subfield[@code='a']"/>
 		</xsl:if>
-		</div>
-	</xsl:template>
+	</xsl:if>
+	<!-- Skriver ut serie -->
+	<xsl:call-template name="serie">
+		<xsl:with-param name="rec" select="$rec"/>
+	</xsl:call-template>
+	<br/>
+	<!-- Skriver ut utgivelsesinformasjon -->
+	<xsl:call-template name="utgivelse">
+		<xsl:with-param name="rec" select="$rec"/>
+	</xsl:call-template>
+	</p>
+	<!-- Skriver ut detaljer -->
+	<p>
+	<xsl:call-template name="detaljer">
+		<xsl:with-param name="rec" select="$rec"/>
+		<xsl:with-param name="kohanr" select="$kohanr"/>
+		<xsl:with-param name="visBilde" select="0"/>
+	</xsl:call-template>
+	<br />
+	<a href="http://torfeus.deich.folkebibl.no/cgi-bin/koha/opac-detail.pl?biblionumber={$kohanr}">Vis i katalogen</a>
+	</p>
+	
+</xsl:template>
+
 </xsl:stylesheet>
