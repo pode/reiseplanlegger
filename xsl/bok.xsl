@@ -7,12 +7,6 @@
 	<xsl:template match="/">
 		<xsl:for-each select="//record">
 		
-			<!-- Henter ut url til Deichmanske -->
-			<xsl:variable name="url">
-				<xsl:value-of select="datafield[@tag=996]/subfield[@code='u']"/>
-			</xsl:variable>
-			
-			
 			<p>		
 			<xsl:variable name="rec" select="//record"/>
 			<strong>
@@ -35,6 +29,10 @@
 				<xsl:with-param name="visBilde" select="1"/>
 			</xsl:call-template>
 			<br />
+			<!-- Henter ut url til Deichmanske -->
+			<xsl:variable name="url">
+				<xsl:value-of select="datafield[@tag=996]/subfield[@code='u']"/>
+			</xsl:variable>
 			<a href="{$url}">Vis i katalogen</a>
 			
 			<xsl:call-template name="visForsideBilde">
