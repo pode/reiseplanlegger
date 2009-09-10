@@ -83,9 +83,8 @@
 
 	<p>
 	<a href="?tittelnr={$kohanr}{$url_ext}">
-	<xsl:value-of select="$rec/datafield[@tag=245]/subfield[@code='a']"/>
-	<!-- Henter ut undertittel -->
-	<xsl:call-template name="undertittel">
+	<!-- Henter ut tittel og undertittel -->
+	<xsl:call-template name="tittel_undertittel">
 		<xsl:with-param name="rec" select="$rec"/>
 	</xsl:call-template>
 	</a>
@@ -109,9 +108,8 @@
 
 	<p>
 	<a href="#">
-	<xsl:value-of select="$rec/datafield[@tag=245]/subfield[@code='a']"/>
-	<!-- Henter ut undertittel -->
-	<xsl:call-template name="undertittel">
+	<!-- Henter ut tittel og undertittel -->
+	<xsl:call-template name="tittel_undertittel">
 		<xsl:with-param name="rec" select="$rec"/>
 	</xsl:call-template>
 	</a>
@@ -139,7 +137,7 @@
 		<xsl:with-param name="visBilde" select="0"/>
 	</xsl:call-template>
 	<br />
-	<a href="http://torfeus.deich.folkebibl.no/cgi-bin/koha/opac-detail.pl?biblionumber={$kohanr}">Vis i katalogen</a>
+	<a href="http://dev.bibpode.no/cgi-bin/koha/opac-detail.pl?biblionumber={$kohanr}">Vis i katalogen</a>
 	</p>
 	
 </xsl:template>

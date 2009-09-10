@@ -436,6 +436,8 @@ function get_ccl_results_as_xml($ccl) {
 		$out .= "</records>";
 	}
 	
+	// DEBUG echo($out);
+	
 	return $out;
 	
 }

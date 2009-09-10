@@ -9,25 +9,24 @@
 
 			<p>		
 			<xsl:variable name="rec" select="zs:recordData/record"/>
-			<xsl:variable name="kohanr">
-				<xsl:value-of select="$rec/datafield[@tag=999]/subfield[@code='c']"/>
-			</xsl:variable>
 			<strong>
-				<!-- Henter ut tittel-->
-				<xsl:value-of select="$rec/datafield[@tag=245]/subfield[@code='a']"/>
-				<!-- Henter ut undertittel -->
-				<xsl:call-template name="undertittel">
+				<!-- Henter ut tittel og undertittel -->
+				<xsl:call-template name="tittel_undertittel">
 					<xsl:with-param name="rec" select="$rec"/>
 				</xsl:call-template>
 			</strong>
+			<br />
 			
 			<xsl:call-template name="detaljer">
 				<xsl:with-param name="rec" select="$rec"/>
-				<xsl:with-param name="kohanr" select="$kohanr"/>
 				<xsl:with-param name="visBilde" select="1"/>
 			</xsl:call-template>
-			
 			<br />
+			
+			<!-- Henter ut kohanr til bruk i URL -->
+			<xsl:variable name="kohanr">
+				<xsl:value-of select="$rec/datafield[@tag=999]/subfield[@code='c']"/>
+			</xsl:variable>
 			<a href="http://torfeus.deich.folkebibl.no/cgi-bin/koha/opac-detail.pl?biblionumber={$kohanr}">Vis i katalogen</a>
 			
 			<xsl:call-template name="visForsideBilde">

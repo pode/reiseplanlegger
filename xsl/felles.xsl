@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:zs="http://www.loc.gov/zing/srw/">
 
+<xsl:template name="tittel_undertittel">
+
+	<xsl:param name="rec"/>
+	<xsl:call-template name="tittel">
+		<xsl:with-param name="rec" select="$rec"/>
+	</xsl:call-template>
+	<xsl:call-template name="undertittel">
+		<xsl:with-param name="rec" select="$rec"/>
+	</xsl:call-template>
+
+</xsl:template>
+
+
+<xsl:template name="tittel">
+
+	<xsl:param name="rec"/>
+	<xsl:value-of select="$rec/datafield[@tag=245]/subfield[@code='a']"/>
+
+</xsl:template>
+
 <xsl:template name="undertittel">
 
 	<xsl:param name="rec"/>
@@ -52,7 +72,6 @@
 <xsl:template name="detaljer">
 
 	<xsl:param name="rec"/>
-	<xsl:param name="kohanr"/>
 	<xsl:param name="visBilde"/>
 
 	<!-- Henter 245 $c -->

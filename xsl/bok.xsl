@@ -7,28 +7,22 @@
 	<xsl:template match="/">
 		<xsl:for-each select="//record">
 		
-			<p>		
+			<p>	
 			<xsl:variable name="rec" select="//record"/>
 			<strong>
-				<!-- Henter ut tittel-->
-				<xsl:value-of select="$rec/datafield[@tag=245]/subfield[@code='a']"/>
-				<!-- Henter ut undertittel -->
-				<xsl:call-template name="undertittel">
+				<!-- Henter ut tittel og undertittel -->
+				<xsl:call-template name="tittel_undertittel">
 					<xsl:with-param name="rec" select="$rec"/>
 				</xsl:call-template>
 			</strong>
 			<br />
 			
-			<xsl:variable name="kohanr">
-				<xsl:value-of select="$rec/datafield[@tag=999]/subfield[@code='c']"/>
-			</xsl:variable>
-			
 			<xsl:call-template name="detaljer">
 				<xsl:with-param name="rec" select="$rec"/>
-				<xsl:with-param name="kohanr" select="$kohanr"/>
 				<xsl:with-param name="visBilde" select="1"/>
 			</xsl:call-template>
 			<br />
+			
 			<!-- Henter ut url til Deichmanske -->
 			<xsl:variable name="url">
 				<xsl:value-of select="datafield[@tag=996]/subfield[@code='u']"/>
