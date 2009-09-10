@@ -4,7 +4,7 @@
 Funksjoner som trengs for å søke i katalogen med Z39.50 eller SRU. 
 */
 
-function z_search($q, $limit = 20, $start = 1, $order = 'descending', $sortBy = 'year') {
+function z_search($q, $limit = 20, $start = 1, $order = 'descending', $sortBy = 'year', $showAuthor = false) {
 	
 	//sti til XSL
 	$xsl_url = '../xsl/bokliste.xsl';
@@ -30,14 +30,15 @@ function z_search($q, $limit = 20, $start = 1, $order = 'descending', $sortBy = 
 		$params = array(array('namespace' => '', 'name' => 'url_ext', 'value' => "type=z39.50"), // TODO: Brukes denne? 
 					    array('namespace' => '', 'name' => 'sortBy',  'value' => $sortBy),
 					    array('namespace' => '', 'name' => 'order',   'value' => $order), 
-					    array('namespace' => '', 'name' => 'target',  'value' => "remote")); 
+					    array('namespace' => '', 'name' => 'target',  'value' => "remote"), 
+					    array('namespace' => '', 'name' => 'visForfatter',  'value' => $showAuthor)); 
 	
 		return transformToHTML($xml, $xsl_url, $params);
 	}
 	
 }
 
-function sru_search($q, $limit = 20, $start = 1, $order = 'descending', $sortBy = 'year') {
+function sru_search($q, $limit = 20, $start = 1, $order = 'descending', $sortBy = 'year', $showAuthor = false) {
 		
 	//oppretter URL til KOHA med cql
 	$xml_url = getSRUURL($q, $start, $limit);
@@ -63,7 +64,8 @@ function sru_search($q, $limit = 20, $start = 1, $order = 'descending', $sortBy 
 	$params = array(array('namespace' => '', 'name' => 'url_ext', 'value' => "type=sru"), // TODO: Brukes denne? 
 					array('namespace' => '', 'name' => 'sortBy',  'value' => $sortBy),
 					array('namespace' => '', 'name' => 'order',   'value' => $order), 
-					array('namespace' => '', 'name' => 'target',  'value' => "remote"), 
+					array('namespace' => '', 'name' => 'target',  'value' => "remote"),
+					array('namespace' => '', 'name' => 'visForfatter',  'value' => $showAuthor),  
 					array('namespace' => '', 'name' => 'showHits',  'value' => "false"));
 	
 	//transformerer til HTML

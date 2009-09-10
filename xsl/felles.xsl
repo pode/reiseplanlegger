@@ -30,6 +30,15 @@
 
 </xsl:template>
 
+<xsl:template name="forfatter">
+
+	<xsl:param name="rec"/>
+	<xsl:if test="string-length($rec/datafield[@tag=100]/subfield[@code='a'])>0">
+		av <xsl:value-of select="$rec/datafield[@tag=100]/subfield[@code='a']"/>
+	</xsl:if>
+
+</xsl:template>
+
 <xsl:template name="serie">
 
 	<xsl:param name="rec"/>

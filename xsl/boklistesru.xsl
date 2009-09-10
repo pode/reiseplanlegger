@@ -115,9 +115,9 @@
 	</a>
 	<!-- Skriver ut forfatter -->
 	<xsl:if test="$visForfatter">
-		<xsl:if test="string-length($rec/datafield[@tag=100]/subfield[@code='a'])>0">
-		<xsl:value-of select="$rec/datafield[@tag=100]/subfield[@code='a']"/>
-		</xsl:if>
+		<xsl:call-template name="forfatter">
+			<xsl:with-param name="rec" select="$rec"/>
+		</xsl:call-template>
 	</xsl:if>
 	<!-- Skriver ut serie -->
 	<xsl:call-template name="serie">
