@@ -8,7 +8,7 @@ lar bruker velge sted som passer med søkeord
 if (empty($_GET['geoId']) && isset($_GET['place']))
 {
 	$place = rawurldecode($_GET['place']);
-	$type = $_GET['type'];
+	$bib = $_GET['bib'];
 	
 	$tnr = "";
 	if(isset($_GET['tittelnr']))
@@ -73,11 +73,11 @@ if (empty($_GET['geoId']) && isset($_GET['place']))
 			$c = 0;
 			foreach ($res as $pl)
 			{
-				if (!empty($sortBy)) //&&$type!='rss'
+				if (!empty($sortBy)) 
 				{
-					$out['links'][$c]['url'] = "geoId=$pl[geoId]&amp;place=$place&amp;country=$pl[country]&amp;type=$type$tnr&amp;sortBy=$sortBy&amp;order=$order";
+					$out['links'][$c]['url'] = "geoId=$pl[geoId]&amp;place=$place&amp;country=$pl[country]&amp;bib=$bib$tnr&amp;sortBy=$sortBy&amp;order=$order";
 				} else {
-					$out['links'][$c]['url'] = "geoId=$pl[geoId]&amp;place=$place&amp;country=$pl[country]&amp;type=$type$tnr";
+					$out['links'][$c]['url'] = "geoId=$pl[geoId]&amp;place=$place&amp;country=$pl[country]&amp;bib=$bib$tnr";
 				}
 				$out['links'][$c]['place'] = "$pl[place], $pl[country]";
 				$c++;

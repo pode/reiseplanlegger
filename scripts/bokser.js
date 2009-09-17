@@ -117,7 +117,7 @@ $(function(){
     	// FLERE TREFF - vis liste med mulighet for å velge hvilket sted som var ment
     	
     	$("#place").find(".widget-content").append('<h3>Velg sted</h3>');
-    	var sort_order_type = "&sortBy=" + getQueryVariable('sortBy') + "&order=" + getQueryVariable('order') + "&type=" + getQueryVariable('type');
+    	var sort_order_type = "&sortBy=" + getQueryVariable('sortBy') + "&order=" + getQueryVariable('order') + "&bib=" + getQueryVariable('bib');
     	jQuery.each(json.links, function() {
     		
     		var this_place = this;
