@@ -11,8 +11,11 @@ z39.50-server-url:portnummer/database
 */
 function yazCclSearch()
 {
-	//henter den globale konfigurasjonen
-	$config = get_config();
+	
+	global $config;
+	
+	//henter den konfigurasjonen for Z39.50
+	$zconfig = get_config();
 	
 	//$GLOBALS['fields'];
 	
@@ -22,7 +25,7 @@ function yazCclSearch()
 	if (!$args[1]) { $args[1] = "normarc"; }
 	if (!$args[2]) { $args[2] = "xml"; }
 	if (!$args[3]) { $args[3] = true; }
-	if (!$args[4]) { $args[4] = "z3950.deich.folkebibl.no:210/data"; }
+	if (!$args[4]) { $args[4] = $config['libraries'][$_GET['bib']]['z3950']; }
 	
 	$ccl 			=& $args[0];
 	$syntax			=& $args[1];
@@ -43,7 +46,7 @@ function yazCclSearch()
 	yaz_range($id, 1, 1);
 	
 	//gjør om ccl-søkestrengen til rpn og søker
-	yaz_ccl_conf($id, $config);
+	yaz_ccl_conf($id, $zconfig);
 	$cclresult = array();
 	if (!yaz_ccl_parse($id, $ccl, $cclresult))
 	{
@@ -105,9 +108,16 @@ returnerer en array med XML-data, hvert element i arrayen
 inneholder XML-data om en record. funksjonen fungerer omtrent
 på samme måte som yazCclSearch
 */
-function yazCclArray($ccl, $syntax = 'marc21', $limit = 20, $host = 'z3950.deich.folkebibl.no:210/data')
+function yazCclArray($ccl, $syntax = 'marc21', $limit = 20, $host = 'default')
 {
-	$config = get_config();
+	
+	global $config;
+	
+	if ($host == 'default') {
+		$host = $config['libraries'][$_GET['bib']]['z3950'];
+	}
+	
+	$zconfig = get_config();
 	$hits = 0;
 	
 	$type = 'xml';
@@ -117,7 +127,7 @@ function yazCclArray($ccl, $syntax = 'marc21', $limit = 20, $host = 'z3950.deich
 	yaz_syntax($id, $syntax);
 	yaz_range($id, 1, 1);
 	
-	yaz_ccl_conf($id, $config);
+	yaz_ccl_conf($id, $zconfig);
 	$cclresult = array();
 	if (!yaz_ccl_parse($id, $ccl, $cclresult))
 	{

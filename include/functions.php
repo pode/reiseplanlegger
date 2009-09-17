@@ -7,24 +7,25 @@ funksjon som skriver ut en søkelinje med tre valg, parameteren
 angir hvilket element i nedtrekkslisten som skal være forhånds-
 valgt
 */
-function writeSearchForm($selected='z39.50', $text='')
+function writeSearchForm($selected, $text='')
 {
-	//array med valg, nøkkel blir 'value', verdi blir listevalg
-	$options = array('z39.50' => 'Z39.50', 'sru' => 'SRU');
+
+	global $config;
+
 ?>
 <form method="get" action="">
 	<p>
 		<label for="autosuggest">Sted/land</label> 
 		<input id="autosuggest" type="text" size="50" name="place" value="<?php echo($text); ?>" />
-		<select name="type">
+		<select name="bib">
 <?php
 //skriver nedtrekksliste
-foreach ($options as $a => $b)
+foreach ($config['libraries'] as $key => $value)
 {
-	if ($selected==$a)
-		echo "\t\t\t<option selected=\"selected\" value=\"$a\">$b</option>\n";
+	if ($selected==$key)
+		echo "\t\t\t<option selected=\"selected\" value=\"$key\">{$value['title']}</option>\n";
 	else
-		echo "\t\t\t<option value=\"$a\">$b</option>\n";
+		echo "\t\t\t<option value=\"$key\">{$value['title']}</option>\n";
 }
 ?>
 		</select>
@@ -307,8 +308,11 @@ function getSRUURL($query,
                 $version = "1.2",
                 $recordSchema = "marcxml")
 {
+	
+	global $config;
+	
 	$query = urlencode($query);
-        return "http://torfeus.deich.folkebibl.no:9999/biblios?operation=$operation&version=$version&query=$query&recordSchema=$recordSchema&startRecord=$startRecord&maximumRecords=$maximumRecords";
+        return "{$config['libraries'][$_GET['bib']]['sru']}?operation=$operation&version=$version&query=$query&recordSchema=$recordSchema&startRecord=$startRecord&maximumRecords=$maximumRecords";
 }
 
 /*

@@ -23,7 +23,7 @@
 			</xsl:call-template>
 			<br />
 			
-			<!-- Henter ut url til Deichmanske -->
+			<!-- Henter ut url til posten i katalogen -->
 			<xsl:variable name="url">
 				<xsl:value-of select="datafield[@tag=996]/subfield[@code='u']"/>
 			</xsl:variable>

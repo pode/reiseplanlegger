@@ -1,10 +1,40 @@
 <?php
 
+// Setter navnet på applikasjonen
+$config = array('app_title' => 'Reiseplanlegger');
+
+/*
+BIBLIOTEK
+
+Her konfigureres de bibliotekene det skal være mulig å søke i, og 
+de opplysningene som trengs for å utføre søket. Rekkefølgen her
+bestemmer rekkefølgen når bibliotekene skal velges ved søk. 
+
+Opplysninger som trengs: 
+title: navn på biblioteket 
+z3950 ELLER sru og item_url
+z3950: tilkoblings-streng for Z39.50
+sru: tilkoblingsstreng for SRU
+item_url: grunn-URL for postvisning i katalogen
+*/
+$config['libraries']['deich'] = array(
+	'title' => 'Deichmanske', 
+	'z3950' => 'z3950.deich.folkebibl.no:210/data'
+);
+$config['libraries']['pode'] = array(
+	'title'    => 'Pode', 
+	'sru'      => 'http://torfeus.deich.folkebibl.no:9999/biblios', 
+	'item_url' => 'http://dev.bibpode.no/cgi-bin/koha/opac-detail.pl?biblionumber='
+);
+
+
 /*
 DIVERSE MELDINGER
 */
 
-$config['msg']['zero_hits'] = '<p>Ingen treff...</p>';
+$config['msg'] = array( 
+	'zero_hits' => '<p>Ingen treff...</p>', 
+);
 
 /*
 MODULER

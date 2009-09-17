@@ -44,7 +44,7 @@ $header_extras[] = '<script src="http://www.google.com/jsapi"></script>
 header('Content-Type: text/html; Extension: xhtml; charset=utf-8');
 
 //skriver header delen
-writeHeader('Reiseplanlegger', $header_extras);
+writeHeader($config['app_title'], $header_extras);
 ?>
 		<div id="content">
 			<div id="menu">
@@ -56,14 +56,18 @@ writeHeader('Reiseplanlegger', $header_extras);
 <?php
 
 $type = "";
-if (isset($_GET['type'])) {
-  $type = $_GET['type'];
+if (isset($_GET['bib'])) {
+	if (!empty($config['libraries'][$_GET['bib']]['sru'])) {
+		$type = 'sru';
+	} else {
+		$type = 'z39.50';
+	}
 }
 $place = "";
 if (isset($_GET['place'])) {
   $place = $_GET['place'];
 }
-writeSearchForm($type, $place);
+writeSearchForm($_GET['bib'], $place);
 
 ?>
 			</div>
@@ -186,7 +190,7 @@ else if (isset($_GET['place']))
 		$search_start = $time;
 
 		
-		$type = $_GET['type'];
+		// $type = $_GET['type'];
 		$geoId = "";
 		$geoId2 = "";
 		if(isset($_GET['geoId']))
