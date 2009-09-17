@@ -56,7 +56,8 @@ if (isset($_GET['input']))
 				$results_array[] = array(
 					'id' 		=> ($i + 1),
 					'value' 	=> $dewey_list_places[$i],
-					'info' 		=> $dewey_list_numbers[$i]);
+					'info' 		=> $dewey_list_numbers[$i]
+				);
 			}
 			
 			//stopper hvis $count blir lik $limit

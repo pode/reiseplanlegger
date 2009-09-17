@@ -83,13 +83,12 @@ if (isset($_GET['about']))
 					<h3>Velkommen til reiseplanleggeren!</h3>
 					<p>
 						Herfra kan du søke på spennende reisemål rundt om i hele verden. Da vil du
-						få tilgang til informasjon om reisehåndbøker fra Deichmanske biblioteks
+						få tilgang til informasjon om reisehåndbøker fra ditt biblioteks
 						fantastiske samling. I tillegg vil du kunne få ekstra opplysninger knyttet
 						til ditt reisemål som lokal tid, værdata og kart.<br />
 						<br />
 						NB! Nedtrekksboksen ved siden av søkefeltet er til for å kunne velge mellom
-						ulike måter å hente katalogdata fra Deichmanske bibliotek på. Vi anbefaler å
-						benytte Z39.50 eller SRU da disse søkene er raskest.
+						ulike bibliotek. 
 					</p>
 <?php
 }
@@ -298,7 +297,7 @@ else if (!isset($_GET['about']))
 					<h3>Velkommen til reiseplanleggeren!</h3>
 					<p>
 						Herfra kan du søke på spennende reisemål rundt om i hele verden. Da vil du
-						få tilgang til informasjon om reisehåndbøker fra Deichmanske biblioteks
+						få tilgang til informasjon om reisehåndbøker fra ditt biblioteks
 						fantastiske samling. I tillegg vil du kunne få ekstra opplysninger knyttet
 						til ditt reisemål som lokal tid, værdata og kart.<br />
 						<br />
@@ -352,7 +351,9 @@ echo "\t\t\t\t\t<p>Siden lastet på $total_time sekunder. $search_time</p>\n";
 <script type="text/javascript">
 //<![CDATA[
 	var options = {
-		script:"autosuggest/autosuggest.php?json=true&limit=10&info=true&",
+		// Hvis man ønsker at Dewey-nummer skal vises brukes denne varianten: 
+		// script:"autosuggest/autosuggest.php?json=true&limit=10&info=true&",
+		script:"autosuggest/autosuggest.php?json=true&limit=10&",
 		varname:"input",
 		json:true,
 		shownoresults:false,
