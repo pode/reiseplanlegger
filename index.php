@@ -49,7 +49,7 @@ writeHeader($config['app_title'], $header_extras);
 		<div id="content">
 			<div id="menu">
 				<!-- MENYLINKER -->
-				<a class="menulinks" href="reiseplanlegger.php">Hjem</a>
+				<a class="menulinks" href=".">Hjem</a>
 				<a class="menulinks" href="?about">Om</a>
 			</div>
 			<div id="header">
