@@ -55,14 +55,7 @@ writeHeader($config['app_title'], $header_extras);
 			<div id="header">
 <?php
 
-$type = "";
-if (isset($_GET['bib'])) {
-	if (!empty($config['libraries'][$_GET['bib']]['sru'])) {
-		$type = 'sru';
-	} else {
-		$type = 'z39.50';
-	}
-}
+$type = get_type($_GET['bib']);
 $place = "";
 if (isset($_GET['place'])) {
   $place = $_GET['place'];
@@ -101,7 +94,7 @@ if (isset($_GET['tittelnr']))
 	//lagrer tittelnummer
 	$tnr = $_GET['tittelnr'];
 	//lagrer søketype (Z39.50, SRU)
-	$type = $_GET['type'];
+	$type = get_type($_GET['bib']);
 	$place = "";
 	
 	if(isset($_GET['place']))
@@ -238,7 +231,7 @@ else if (isset($_GET['place']))
 			{
 				echo "<p>Antall treff: $hits</p>\n";
 				
-				$params = array(array('namespace' => '', 'name' => 'url_ext', 'value' => "$geoId&place=$place&type=".$type),
+				$params = array(array('namespace' => '', 'name' => 'url_ext', 'value' => "$geoId&place=$place&bib=".$_GET['bib']),
 							array('namespace' => '', 'name' => 'sortBy', 'value' => $sortBy),
 							array('namespace' => '', 'name' => 'order', 'value' => $order), 
 							array('namespace' => '', 'name' => 'target', 'value' => "local"));
@@ -270,7 +263,7 @@ else if (isset($_GET['place']))
 			$hits = $nodeList->length;
 			
 			//parametere til XSL
-			$params = array(array('namespace' => '', 'name' => 'url_ext', 'value' => "$geoId&place=$place&type=".$type),
+			$params = array(array('namespace' => '', 'name' => 'url_ext', 'value' => "$geoId&place=$place&bib=".$_GET['bib']),
 							array('namespace' => '', 'name' => 'sortBy', 'value' => $sortBy),
 							array('namespace' => '', 'name' => 'order', 'value' => $order), 
 							array('namespace' => '', 'name' => 'target', 'value' => "local"));
@@ -444,6 +437,15 @@ function get_ccl_results_as_xml($ccl) {
 	
 	return $out;
 	
+}
+
+function get_type($bib) {
+	global $config;
+	if (!empty($config['libraries'][$bib]['sru'])) {
+		return 'sru';
+	} else {
+		return 'z39.50';
+	}
 }
 
 ?>
