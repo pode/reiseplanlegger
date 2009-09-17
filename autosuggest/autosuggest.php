@@ -86,7 +86,7 @@ if (isset($_GET['json']))
 	//skriver ut arrayen i json-format
 	foreach ($results_array as $result)
 	{
-		if (isset($_GET['info']))
+		if (!empty($_GET['info']) && $_GET['info'] == 'true')
 			$arr[] = "\n\t\t{\"id\": \"$result[id]\", \"value\": \"$result[value]\", \"info\": \"Deweynummer: $result[info]\"}";
 		else
 			$arr[] = "\n\t\t{\"id\": \"$result[id]\", \"value\": \"$result[value]\", \"info\": \"\"}";

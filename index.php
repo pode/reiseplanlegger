@@ -351,13 +351,16 @@ echo "\t\t\t\t\t<p>Siden lastet på $total_time sekunder. $search_time</p>\n";
 <script type="text/javascript">
 //<![CDATA[
 	var options = {
-		// Hvis man ønsker at Dewey-nummer skal vises brukes denne varianten: 
-		// script:"autosuggest/autosuggest.php?json=true&limit=10&info=true&",
-		script:"autosuggest/autosuggest.php?json=true&limit=10&",
-		varname:"input",
-		json:true,
-		shownoresults:false,
-		maxresults:10
+		<?php
+		if (!empty($config['autosuggest']['show_dewey']) && $config['autosuggest']['show_dewey'] == 'true') {
+			echo('script:"autosuggest/autosuggest.php?json=true&limit=' . $config['autosuggest']['maxresults'] . '&info=true&",');
+		} else {
+			echo('script:"autosuggest/autosuggest.php?json=true&limit=' . $config['autosuggest']['maxresults'] . '&",');
+		}
+		echo('varname:"input",');
+		echo('json:true,');
+		echo('shownoresults:false,');
+		?>
 	};
 	var as_json = new bsn.AutoSuggest('autosuggest', options);
 //]]>

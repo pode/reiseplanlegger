@@ -50,6 +50,19 @@ $config['msg'] = array(
 );
 
 /*
+AUTOSUGGEST
+
+Konfigurerer hvordan autosuggest i søkeboksen oppfører seg. 
+show_dewey [true|false] - slår av og på visningen av Dewey-nummer
+maxresults 10 - bestemmer antall forslag som skal vises
+*/
+
+$config['autosuggest'] = array(
+	'show_dewey' => false, 
+	'maxresults' => 10, 
+);
+
+/*
 MODULER
 
 Moduler konfigureres med et array på formen
