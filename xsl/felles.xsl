@@ -153,10 +153,7 @@
 		<xsl:value-of select="$rec/datafield[@tag=020]/subfield[@code='a']"/>
 	</xsl:variable>
 	<xsl:if test="string-length($isbn)>0">
-		<xsl:variable name="imgisbn">
-			<xsl:value-of select="translate($isbn, '-', '')"/>
-		</xsl:variable>
-		<br /><br /><img alt="" src="http://covers.openlibrary.org/b/isbn/{$imgisbn}-M.jpg"/>
+		<br /><br /><img alt="" src="api/image.php?isbn={$isbn}"/>
 	</xsl:if>
 
 </xsl:template>
