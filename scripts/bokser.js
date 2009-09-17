@@ -98,7 +98,7 @@ $(function(){
 			                           country: country_nor, 
 			                           langs: langs, 
 			                           q: getQueryVariable('place'),
-			                           type: getQueryVariable('type')
+			                           bib: getQueryVariable('bib')
 			                          },
 			    function(data){
 			      $("#" + this_widget.id).find(".widget-content").text("");

@@ -13,9 +13,9 @@ include_once('inc.catalogue.php');
 Henter ut fortellinger fra katalogen, basert på land
 */
 
-if (!empty($_GET['country']) && !empty($_GET['type'])) {
+if (!empty($_GET['country']) && !empty($_GET['bib'])) {
 
-  if ($_GET['type'] == 'z39.50') {
+  if (get_type($_GET['bib']) == 'z39.50') {
 
   	if ($zresult = z_search("eo={$_GET['country']} fortellinger", $config['modules']['stories']['limit'], 1, 'descending', 'year', true)) {
   		echo $zresult;

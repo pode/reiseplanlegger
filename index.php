@@ -55,12 +55,17 @@ writeHeader($config['app_title'], $header_extras);
 			<div id="header">
 <?php
 
-$type = get_type($_GET['bib']);
+$type = "";
+$bib = "";
+if (isset($_GET['bib'])) {
+	$bib = $_GET['bib'];
+	$type = get_type($_GET['bib']);
+}
 $place = "";
 if (isset($_GET['place'])) {
   $place = $_GET['place'];
 }
-writeSearchForm($_GET['bib'], $place);
+writeSearchForm($bib, $place);
 
 ?>
 			</div>
@@ -437,15 +442,6 @@ function get_ccl_results_as_xml($ccl) {
 	
 	return $out;
 	
-}
-
-function get_type($bib) {
-	global $config;
-	if (!empty($config['libraries'][$bib]['sru'])) {
-		return 'sru';
-	} else {
-		return 'z39.50';
-	}
 }
 
 ?>

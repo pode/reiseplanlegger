@@ -358,4 +358,14 @@ function transformToHTML($xml_data, $xsl_path, $params)
 	//returnerer ferdig transformert XML
 	return implode("\n", $tmp);
 }
+
+function get_type($bib) {
+	global $config;
+	if (!empty($config['libraries'][$bib]['sru'])) {
+		return 'sru';
+	} else {
+		return 'z39.50';
+	}
+}
+
 ?>

@@ -13,7 +13,7 @@ include_once('inc.catalogue.php');
 Henter ut språkkurs og lærebøker fra katalogen
 */
 
-if (!empty($_GET['langs']) && !empty($_GET['type'])) {
+if (!empty($_GET['langs']) && !empty($_GET['bib'])) {
 
   ?>
   <script type="text/javascript">
@@ -25,7 +25,7 @@ if (!empty($_GET['langs']) && !empty($_GET['type'])) {
 	}
     $.get("api/index.php", { mod: 'language',
 				             lang: lang, 
-				             type: '<?php echo($_GET['type']); ?>' 
+				             bib: '<?php echo($_GET['bib']); ?>' 
 				             },
 	    function(data){
 	      $("#langsearch").text("");
@@ -51,7 +51,7 @@ if (!empty($_GET['langs']) && !empty($_GET['type'])) {
 
 } elseif (!empty($_GET['lang'])) {
 	
-  if ($_GET['type'] == 'z39.50') {
+  if (get_type($_GET['bib']) == 'z39.50') {
   	
   	if ($zs_result = z_search("eo={$_GET['lang']} and eo=språkkurs", $config['modules']['language']['limit'])) {
   		echo "<p>Språkkurs</p>";

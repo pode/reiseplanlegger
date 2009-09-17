@@ -26,7 +26,12 @@ $config['libraries']['pode'] = array(
 	'sru'      => 'http://torfeus.deich.folkebibl.no:9999/biblios', 
 	'item_url' => 'http://dev.bibpode.no/cgi-bin/koha/opac-detail.pl?biblionumber='
 );
-
+/*
+$config['libraries']['bergen'] = array(
+	'title' => 'Bergen offentlige', 
+	'z3950' => 'z3950.bergen.folkebibl.no:210/data', 
+);
+*/
 
 /*
 DIVERSE MELDINGER
