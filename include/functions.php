@@ -199,9 +199,22 @@ function get_files($root_dir, $all_data=array())
 } // end get_files()
 
 /*
+Funksjoner som bygger opp søkestrenger 
+
+getCclDewey og getCqlDewey er de opprinnelige funksjonene, utviklet av studentene. Disse er beholdt, med et 
+tilegg av "Dewey" i navnet, for å gjøre det lett å bytte tilbake til disse funksjonene, dersom det skulle
+vise seg å være ønskelig. De nye funksjonene getCcl og getCql har beholdt de samme argumentene som de 
+gamle funksjonene, for at det ikke skal være nødvendig å endre på koden som kaller disse funksjonene. 
+*/
+
+/*
 funksjon som bygger opp ccl-søkestrenger til reiseplanlegger
 */
 function getCcl($query, $path, $type)
+{
+	return "eo=$query Reisehåndbøker";
+}
+function getCclDewey($query, $path, $type)
 {
 	//Prøver og åpne filen
 	$fil = file_get_contents($path) or exit("Kunne ikke hente fil... ".$path);
@@ -243,6 +256,10 @@ function getCcl($query, $path, $type)
 funksjon som bygger opp cql-søkestrenger til reiseplanlegger
 */
 function getCql($query, $path)
+{
+	return "dc.subject = $query and dc.subject = Reisehåndbøker";
+}
+function getCqlDewey($query, $path)
 {
 	//Prøver og åpner filen
 	$fil = file_get_contents($path) or exit("Kunne ikke hente fil... ".$path);
