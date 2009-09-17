@@ -136,7 +136,8 @@ if (isset($_GET['tittelnr']))
 		
 		//lagrer parametere til XSLT
 		$params = array(array('namespace' => '', 'name' => 'url_ext', 'value' => '&type='.$type), 
-		                array('namespace' => '', 'name' => 'target', 'value' => 'local'));
+		                array('namespace' => '', 'name' => 'target', 'value' => 'local'), 
+		                array('namespace' => '', 'name' => 'item_url', 'value' => $config['libraries'][$_GET['bib']]['item_url']));
 		
 		//gjennomfører trans. og skriver ut
 		echo transformToHTML($xml_data, $xsl_url, $params);

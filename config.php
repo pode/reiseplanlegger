@@ -27,6 +27,10 @@ $config['libraries']['pode'] = array(
 	'item_url' => 'http://dev.bibpode.no/cgi-bin/koha/opac-detail.pl?biblionumber='
 );
 /*
+$config['libraries']['trondheim'] = array(
+	'title' => 'Trondheim folkebibliotek', 
+	'z3950' => 'z3950.trondheim.folkebibl.no:210/data', 
+);
 $config['libraries']['bergen'] = array(
 	'title' => 'Bergen offentlige', 
 	'z3950' => 'z3950.bergen.folkebibl.no:210/data', 

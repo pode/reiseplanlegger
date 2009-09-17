@@ -27,7 +27,7 @@
 			<xsl:variable name="tittelnr">
 				<xsl:value-of select="$rec/datafield[@tag=999]/subfield[@code='c']"/>
 			</xsl:variable>
-			<a href="http://torfeus.deich.folkebibl.no/cgi-bin/koha/opac-detail.pl?biblionumber={$tittelnr}">Vis i katalogen</a>
+			<a href="{$item_url}{$tittelnr}">Vis i katalogen</a>
 			
 			<xsl:call-template name="visForsideBilde">
 				<xsl:with-param name="rec" select="$rec"/>

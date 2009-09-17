@@ -40,6 +40,8 @@ function z_search($q, $limit = 20, $start = 1, $order = 'descending', $sortBy = 
 
 function sru_search($q, $limit = 20, $start = 1, $order = 'descending', $sortBy = 'year', $showAuthor = false) {
 		
+	global $config;
+		
 	//oppretter URL til KOHA med cql
 	$xml_url = getSRUURL($q, $start, $limit);
 	//sti til XSL
@@ -66,7 +68,8 @@ function sru_search($q, $limit = 20, $start = 1, $order = 'descending', $sortBy 
 					array('namespace' => '', 'name' => 'order',   'value' => $order), 
 					array('namespace' => '', 'name' => 'target',  'value' => "remote"),
 					array('namespace' => '', 'name' => 'visForfatter',  'value' => $showAuthor),  
-					array('namespace' => '', 'name' => 'showHits',  'value' => "false"));
+					array('namespace' => '', 'name' => 'showHits',  'value' => "false"), 
+					array('namespace' => '', 'name' => 'item_url', 'value' => $config['libraries'][$_GET['bib']]['item_url']));
 	
 	//transformerer til HTML
 	return transformToHTML($xml, $xsl_url, $params);

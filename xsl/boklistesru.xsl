@@ -137,7 +137,7 @@
 		<xsl:with-param name="visBilde" select="0"/>
 	</xsl:call-template>
 	<br />
-	<a href="http://dev.bibpode.no/cgi-bin/koha/opac-detail.pl?biblionumber={$kohanr}">Vis i katalogen</a>
+	<a href="{$item_url}{$kohanr}">Vis i katalogen</a>
 	</p>
 	
 </xsl:template>
