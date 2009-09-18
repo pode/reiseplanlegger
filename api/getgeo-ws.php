@@ -1,381 +1,376 @@
 <?php
 
 /*
---------------- STEDSFORSLAG ---------------
-lar bruker velge sted som passer med søkeord
-*/
-//geoId er ikke satt, place er satt
-if (empty($_GET['geoId']) && isset($_GET['place']))
-{
-	$place = rawurldecode($_GET['place']);
-	$type = $_GET['type'];
-	
-	$tnr = "";
-	if(isset($_GET['tittelnr']))
-		$tnr = "&amp;tittelnr=".$_GET['tittelnr'];
 
-	//hvis place ikke er tom
-	if (!empty($place))
-	{
+- Dokumentasjon av search-APIet: 
+	http://www.geonames.org/export/geonames-search.html
+	featureClass og featureCode hentes herfra:
+	http://www.geonames.org/export/codes.html
+	featureClass er på en bokstav, feks A for "country, state, region,..."
+	featuteCode er på flere bokstaver
+	Merk av søkebegrepet kan angis som parameterne q, name eller name_equals, 
+	avhengig av hvor spesifik man vil være. 
+	
+- Dokumetasjon av countryInfo-APIet: 
+	http://www.geonames.org/export/web-services.html#countryInfo
+
+- Har ikke klart å finne et API der geoId kan brukes som parameter
+
+*/
+
+//geoId er ikke satt, place er satt
+if (!empty($_GET['place'])) {
+
+	// Array for å samle opp landene vi finner
+	$data      = '';
+	$sted_data = '';
+
+	$place = urlencode($_GET['place']);
+	
+	// Se etter et land først
+	$sted_data = json_decode(file_get_contents("http://ws.geonames.org/search?name=$place&maxRows=10&featureCode=PCLI&lang=nb&style=MEDIUM&type=json"));
+ 
+	if ($sted_data->totalResultsCount == 0) {
+	
+		// Vi fant ikke noe land, da ser vi etter et sted
+		$sted_data = json_decode(file_get_contents("http://ws.geonames.org/search?name=$place&maxRows=10&featureClass=P&lang=nb&style=MEDIUM&type=json"));
+	
+	}
+	
+	// Har vi noe sted nå? I så fall beriker vi stedet med mere info
+	if ($sted_data->totalResultsCount > 0) {
+	
+		foreach ($sted_data->geonames as $sted) {
 		
-		//søker GeoNames
-		$res = searchGeo($place);
+			// Sjekk om geoId er satt - i så fall skal vi bare ha ett av de stedne vi har funnet
+			// Dersom geoId ikke er lik geonameId for dette stedet går vi videre til neste
+			if(!empty($_GET['geoId']) && ($_GET['geoId'] != $sted->geonameId)) {
+				continue;
+			} 
 		
-		if (empty($res)) { 
+			$landekode = $sted->countryCode;
 		
-		  // Det kan være at bruker søkte etter et land, i så fall skal vi vise data for hovedstaden
-		  // Dette forutsetter at navnet vi ser etter foreligger på engelsk
-		  $place_url = urlencode($place);
-		  $json = json_decode(file_get_contents("http://ajax.googleapis.com/ajax/services/language/translate?v=1.0&q={$place_url}&langpair=no|en"));
-          $placeEng = $json->responseData->translatedText;
-		  $res = searchGeo(getCapital($placeEng), $placeEng);
-		}
+			// Hent mer info om landet
+			$landedata = json_decode(file_get_contents("http://ws.geonames.org/countryInfo?country=$landekode&lang=nb&type=json"));
+	
+			// Hent ut landedataene ($landedata->geonames[0]) og lagre dem som placeInfo i $land
+			$sted->placeInfo = $landedata->geonames[0];
 			
-		// Hvis $res fortsatt er tom fant vi ikke stedet, hverken som by eller land
-		if(empty($res)) 
-		{
-			
-			$out['result'] = 0;
-			$out['debug'] = $_SERVER['QUERY_STRING'];
-			echo(json_encode($out));
-			
-		//ett resultat
-		}
-		else if(count($res)==1)
-		{
-			
-			$out['result'] = 1;
-			
-			//henter ut geoId
-			$out['geoId'] = $res['0']['geoId'];
-			//henter info om sted basert på geoId
-			$out['placeInfo'] = getGeo($out['geoId']);
-			
-			// lagrer sted og land
-			// $out['placeEng'] = $placeInfo['place'];
-			// $out['country'] = $placeInfo['country'];
-			
-			$out['localTime'] = getLocalTime($placeInfo['timeZone']);
-			
-			$out['debug'] = $_SERVER['QUERY_STRING'];
-			
-			echo(json_encode($out));
-			
-		}
-		//flere treff, bruker må velge sted
-		else
-		{
-			
-			$out['result'] = 2;
-			
-			//lager linker
-			$out['links'] = array();
-			$c = 0;
-			foreach ($res as $pl)
-			{
-				if (!empty($sortBy)) //&&$type!='rss'
-				{
-					$out['links'][$c]['url'] = "geoId=$pl[geoId]&amp;place=$place&amp;country=$pl[country]&amp;type=$type$tnr&amp;sortBy=$sortBy&amp;order=$order";
-				} else {
-					$out['links'][$c]['url'] = "geoId=$pl[geoId]&amp;place=$place&amp;country=$pl[country]&amp;type=$type$tnr";
+			// Utvid språk til fulle språknavn og lagre dem som et array i placeInfo->languages_long for dette landet
+			$langs = explode(',', $sted->placeInfo->languages);
+			foreach ($langs as $lang) {
+				if ($langlang = get_lang($lang)) {
+					$sted->placeInfo->languages_long[] = $langlang;
 				}
-				$out['links'][$c]['place'] = "$pl[place], $pl[country]";
-				$c++;
 			}
 			
-			$out['debug'] = $_SERVER['QUERY_STRING'];
+			// Hent info om hovedstad
+			$hovedstad = $sted->placeInfo->capital;
+			$hovedstad_data = json_decode(file_get_contents("http://ws.geonames.org/search?q=$hovedstad&maxRows=1&featureCode=PPLC&lang=nb&type=json&style=MEDIUM"));
+			// Sjekk at vi fikk akkurat ett treff
+			if ($hovedstad_data->totalResultsCount == 1) {
+				$sted->placeInfo->capital_long = $hovedstad_data->geonames[0];
+			}
 			
-			echo(json_encode($out));
+			// Legg til dette landet i arrayet
+			$data[] = $sted;
 			
-		}
+		} 
+	
+	} else {
+	
+		$data = 0;	
+		
 	}
+		
 }
+
+output($data);
+
+/* FUNKSJONER */
+
+function output($d) {
+
+	if (!empty($_GET['debug'])) {
+		echo("<pre>");
+		print_r($d);
+		echo("</pre>");
+	} else {
+		print(json_encode($d));
+	}
+	
+}
+
+/*
+
+Sted: 
+http://ws.geonames.org/search?name=g%C3%B6teborg&maxRows=10&featureClass=P&lang=nb&style=MEDIUM
+
+?place=london
+
+{"result":2,"links":[
+	{"url":"geoId=6058560&place=london&country=Canada&bib=","place":"London, Canada"},
+	{"url":"geoId=2643743&place=london&country=United Kingdom&bib=","place":"London, United Kingdom"}
+],"debug":"place=london"}
+
+?place=frankrike
+
+{"result":1,
+"geoId":"2988507",
+"placeInfo":{
+	"lat":"48.85341",
+	"lon":"2.3488",
+	"timeZone":"Europe\/Paris",
+	"place":"Paris",
+	"lang":["Fransk","Bretonsk","Korsikansk","Katalansk","Baskisk"],
+	"country":"France"
+},
+"localTime":
+"Fredag 18. September 14:49 CEST",
+"debug":"place=frankrike"}
+
+?place=københavn
+
+{
+"result":1,
+"geoId":"2618425",
+"placeInfo":{
+	"lat":"55.6776812020993",
+	"lon":"12.5709342956543",
+	"timeZone":"Europe\/Copenhagen",
+	"place":"Copenhagen",
+	"lang":["Dansk","Engelsk","F\u00e6r\u00f8ysk","Tysk"],
+	"country":"Denmark"
+},
+"localTime":"Fredag 18. September 14:31 CEST",
+"debug":"place=k%C3%B8benhavn"}
+
+?geoId=2618425
+
+{
+"result":1,
+"geoId":"2618425",
+"placeInfo":{
+	"lat":"55.6776812020993",
+	"lon":"12.5709342956543",
+	"timeZone":"Europe\/Copenhagen",
+	"place":"Copenhagen",
+	"lang":["Dansk","Engelsk","F\u00e6r\u00f8ysk","Tysk"],
+	"country":"Denmark"
+},
+"localTime":"Fredag 18. September 14:36 CEST",
+"debug":"geoId=2618425"}
+
+*/
+
+
+//geoId er ikke satt, place er satt
+if (empty($_GET['geoId']) && isset($_GET['place'])) {
+
+	
 
 //geoId er satt
-else if(isset($_GET['geoId']))
-{
-	
-	$out['result'] = 1;
-	$out['geoId'] = $_GET['geoId'];
-	//henter info om sted basert på geoId
-	$out['placeInfo'] = getGeo($_GET['geoId']);
-	$out['localTime'] = getLocalTime($out['placeInfo']['timeZone']);
-
-    $out['debug'] = $_SERVER['QUERY_STRING'];
-
-    echo(json_encode($out));
+} else if(isset($_GET['geoId'])) {
 
 }
 
-/*
-funksjon som henter ut geoId, engelsk stedsnavn og engelsk
-landsnavn basert på norske stedsnavn (med alternative navn)
-*/
-function searchGeo($place, $country="")
-{
-	//URL til cities15000.txt hentet fra GeoNames.org
-	$world = "../geonames/cities15000.txt";
-	
-	//åpner fil for lesing
-	$file_world = file_get_contents($world) or exit("Kunne ikke hente fil... $world");
-	
-	//oppretter returarray
-	$ret = array();
-	
-	//splitter filen i linjer
-	$file_world_array = explode("\n", $file_world);
-	
-	//gjør dette så lenge man ikke har kommet til slutten på filen
-	foreach ($file_world_array as $line)
-	{
-		if (!$line)
-			continue;
-			
-		//splitter på tabulator
-		$raw_data = explode("\t", $line);
+function get_lang($kode) {
 
-		//lagrer engelsk stedsnavn fra andre kolonne i filen
-		$place_file = $raw_data[1];
-		
-		/*
-		hvis dette stedet er det man søker etter blir data lagt i
-		ret[]
-		*/
-		if (strtolower($place_file)==strtolower($place))
-		{
-			/*
-			henter geoId (kolonne 1), place, språk (kolonne 14) og land via
-			landskodefunksjonen (kolonne 9)
-			*/
-			$place_info = array("geoId" => $raw_data[0],
-									"place" => $place_file,
-									"country" => getCountryName($raw_data[8]));
-			
-			if ($country == "") {
-			  $ret[] = $place_info;
-			} elseif (strtolower($place_info['country']) == strtolower($country)) {
-			  $ret[] = $place_info;	
-			}
-		}
-		/*
-		finnes ikke ønsket stedsnavn i filen blir også alternative
-		navn søkt i (kolonne 4)
-		*/
-		else
-		{
-			$alternative_place_raw = $raw_data[3];
-			//splitter på komma
-			$alternative_place = explode(",", $alternative_place_raw);
+$lang = array(
+	'aa' => 'Afar', 
+	'ab' => 'Abkhasisk',
+	'ae' => 'Avestisk',
+	'af' => 'Afrikaans',
+	'ak' => 'Akan',
+	'am' => 'Amharisk',
+	'an' => 'Aragonesisk',
+	'ar' => 'Arabisk',
+	'as' => 'Assamesisk',
+	'av' => 'Avarisk',
+	'ay' => 'Aymara',
+	'az' => 'Aserbajdsjansk',
+	'ba' => 'Basjkirsk',
+	'be' => 'Hviterussisk',
+	'bg' => 'Bulgarsk',
+	'bh' => 'Bihari',
+	'bi' => 'Bislama',
+	'bm' => 'Bambara',
+	'bn' => 'Bengali',
+	'bo' => 'Tibetansk',
+	'br' => 'Bretonsk',
+	'bs' => 'Bosnisk',
+	'ca' => 'Katalansk',
+	'ce' => 'Tsjetsjensk',
+	'ch' => 'Chamorro',
+	'co' => 'Korsikansk',
+	'cr' => 'Cree',
+	'cs' => 'Tsjekkisk',
+	'cu' => 'Kirkeslavisk',
+	'cv' => 'Tsjuvansk',
+	'cy' => 'Walisisk',
+	'da' => 'Dansk',
+	'de' => 'Tysk',
+	'dv' => 'Dhivehi',
+	'dz' => 'Dzongkha',
+	'ee' => 'Ewe',
+	'el' => 'Gresk',
+	'en' => 'Engelsk',
+	'eo' => 'Esperanto',
+	'es' => 'Spansk',
+	'et' => 'Estisk',
+	'eu' => 'Baskisk',
+	'fa' => 'Persisk',
+	'ff' => 'Fulfulde',
+	'fi' => 'Finsk',
+	'fj' => 'Fijisk',
+	'fo' => 'Færøysk',
+	'fr' => 'Fransk',
+	'fy' => 'Frisisk',
+	'ga' => 'Irsk',
+	'gd' => 'Skotsk gælisk',
+	'gl' => 'Galisisk',
+	'gn' => 'Guaraní',
+	'gu' => 'Gujarati',
+	'gv' => 'Mansk',
+	'ha' => 'Hausa',
+	'he' => 'Hebraisk',
+	'hi' => 'Hindi',
+	'ho' => 'Hiri motu',
+	'hr' => 'Kroatisk',
+	'ht' => 'Haitisk kreolsk',
+	'hu' => 'Ungarsk',
+	'hy' => 'Armensk',
+	'hz' => 'Herero',
+	'ia' => 'Interlingua',
+	'id' => 'Indonesisk',
+	'ie' => 'Interlingue',
+	'ig' => 'Ibo',
+	'ii' => 'Yi',
+	'ik' => 'Inupiak',
+	'io' => 'Ido',
+	'is' => 'Islandsk',
+	'it' => 'Italiensk',
+	'iu' => 'Inuittisk',
+	'ja' => 'Japansk',
+	'jv' => 'Javanesisk',
+	'ka' => 'Georgisk',
+	'kg' => 'Kongolesisk',
+	'ki' => 'Gikuyu',
+	'kj' => 'Kwanyama',
+	'kk' => 'Kasakhisk',
+	'kl' => 'Kalaallisut',
+	'km' => 'Khmer',
+	'kn' => 'Kannada',
+	'ko' => 'Koreansk',
+	'kr' => 'Kanuri',
+	'ks' => 'Kashmiri',
+	'ku' => 'Kurdisk',
+	'kv' => 'Komi',
+	'kw' => 'Kornisk',
+	'ky' => 'Kirgisisk',
+	'la' => 'Latin',
+	'lb' => 'Luxembourgsk',
+	'lg' => 'Luganda',
+	'li' => 'Limburgisk',
+	'ln' => 'Lingala',
+	'lo' => 'Laotisk',
+	'lt' => 'Litauisk',
+	'lu' => 'Luba-Katanga',
+	'lv' => 'Latvisk',
+	'mg' => 'Gassisk',
+	'mh' => 'Marshallesisk',
+	'mi' => 'Maoriski',
+	'mk' => 'Makedonsk',
+	'ml' => 'Malayalam',
+	'mn' => 'Mongolsk',
+	'mo' => 'Moldovsk',
+	'mr' => 'Marathi',
+	'ms' => 'Malayisk',
+	'mt' => 'Maltesisk',
+	'my' => 'Burmesisk',
+	'na' => 'Naurisk',
+	'nb' => 'Bokmål',
+	'nd' => 'Nord-ndebele',
+	'ne' => 'Nepali',
+	'ng' => 'Ndonga',
+	'nl' => 'Nederlandsk',
+	'nn' => 'Nynorsk',
+	'no' => 'Norsk',
+	'nr' => 'Sør-ndebele',
+	'nv' => 'Navajo',
+	'ny' => 'Chichewa',
+	'oc' => 'Oksitansk',
+	'oj' => 'Ojibwa',
+	'om' => 'Oromo',
+	'or' => 'Oriya',
+	'os' => 'Ossetisk',
+	'pa' => 'Punjabi',
+	'pi' => 'Pali',
+	'pl' => 'Polsk',
+	'ps' => 'Pashto',
+	'pt' => 'Portugisisk',
+	'qu' => 'Quechua',
+	'rm' => 'Retoromansk',
+	'rn' => 'Kirundi',
+	'ro' => 'Rumensk',
+	'ru' => 'Russisk',
+	'rw' => 'Kinyarwanda',
+	'sa' => 'Sanskrit',
+	'sc' => 'Sardisk',
+	'sd' => 'Sindhi',
+	'se' => 'Nordsamisk',
+	'sg' => 'Sango',
+	'sh' => 'Serbokroatisk',
+	'si' => 'Singalesisk',
+	'sk' => 'Slovakisk',
+	'sl' => 'Slovensk',
+	'sm' => 'Samoansk',
+	'sn' => 'Shona',
+	'so' => 'Somalisk',
+	'sq' => 'Albansk',
+	'sr' => 'Serbisk',
+	'ss' => 'Swati',
+	'st' => 'Sesotho',
+	'su' => 'Sundanesisk',
+	'sv' => 'Svensk',
+	'sw' => 'Swahili',
+	'ta' => 'Tamilsk',
+	'te' => 'Telugu',
+	'tg' => 'Tadsjikisk',
+	'th' => 'Thai',
+	'ti' => 'Tigrinya',
+	'tk' => 'Turkmensk',
+	'tl' => 'Tagalog',
+	'tn' => 'Tswana',
+	'to' => 'Tonganesisk',
+	'tr' => 'Tyrkisk',
+	'ts' => 'Tsonga',
+	'tt' => 'Tatarsk',
+	'tw' => 'Twi',
+	'ty' => 'Tahitisk',
+	'ug' => 'Uighur',
+	'uk' => 'Ukrainsk',
+	'ur' => 'Urdu',
+	'uz' => 'Usbekisk',
+	've' => 'Venda',
+	'vi' => 'Vietnamesisk',
+	'vo' => 'Volapük',
+	'wa' => 'Vallonsk',
+	'wo' => 'Wolof',
+	'xh' => 'Xhosa',
+	'yi' => 'Jiddisk',
+	'yo' => 'Yoruba',
+	'za' => 'Zhuang',
+	'zh' => 'Kinesisk',
+	'zu' => 'Zulu'
+);
 
-			//går gjennom alternative navn
-			foreach ($alternative_place as $alternative_place_file)
-			{
-				/*
-				hvis stedsnavnet finnes puttes det i ret[] på
-				samme måte som engelske stedsnavn
-				*/
-				if (strtolower($alternative_place_file)==strtolower($place))
-				{
-					$place_info = array("geoId" => $raw_data[0],
-											"place" => $alternative_place_file,
-											"country" => getCountryName($raw_data[8]));
-					if ($country == "") {
-			          $ret[] = $place_info;
-			        } elseif (strtolower($place_info['country']) == strtolower($country)) {
-			          $ret[] = $place_info;	
-			        }
-				}
-			}
-		}
+	if ($lang[$kode]) {
+		return $lang[$kode];
+	} else {
+		return false;	
 	}
 	
-	return $ret;
 }
-
-/*
-returnerer lat, lon, tidssone, engelsk stedsnavn, språk og land i et array
-med nøkler 'lat', 'lon', 'timeZone', 'place', 'lang' og 'country'.
-parameter er geonames-id
-*/
-function getGeo($geoId)
-{
-	//$norway = "http://frigg.hiof.no/h09d08/geonames/NO.txt";
-	//$contents_norway = file_get_contents($norway) or exit("Kunne ikke hente fil... $norway");
-	$world = "../geonames/cities15000.txt";
-	$contents_world = file_get_contents($world) or exit("Kunne ikke hente fil... $world");
-	
-	/*
-	splitter strengen på nylinjetegn, vi har da cities15000.txt
-	linje for linje i en array
-	*/
-	$data_world = explode("\n", $contents_world);
-	
-	foreach ($data_world as $line)
-	{
-		//splitter opp hver linje på tabulator
-		$countryInfo = explode("\t", $line);
-		
-		//oppretter når riktig geonames-id er funnet
-		if ($countryInfo[0]==$geoId)
-		{
-			//indeksen forteller hvilken kolonne verdiene er hentet fra
-			$ret = array("lat"      => $countryInfo[4],
-						 "lon"      => $countryInfo[5],
-						 "timeZone" => $countryInfo[17],
-						 "place"    => $countryInfo[1],
-						 "lang"     => getLang($countryInfo[8]),
-						 "country"  => getCountryName($countryInfo[8]));
-		}
-	}
-	
-	return $ret;
-}
-
-/*
-funksjon som på basis av ISO 3166-1-landskode på to bokstaver
-gir fullt engelsk landsnavn
-*/
-function getCountryName($countryCode)
-{
-	$country_list = "../geonames/countryInfo.txt";
-	$contents = file_get_contents($country_list) or exit("Kunne ikke hente fil... $country_list");
-	
-	$data = explode("\n", $contents);
-	
-	foreach ($data as $line)
-	{
-		$countryInfo = explode("\t", $line);
-		
-		if (strtolower($countryInfo[0])==strtolower($countryCode))
-		{
-			return $countryInfo[4];
-		}
-	}
-	
-	return -1;
-}
-
-/*
-funksjon som på basis av ISO 3166-1-landskode på to bokstaver
-gir forkortelsene for landets språk
-*/
-function getLang($countryCode)
-{
-	
-	$language_names = array();
-	
-	$country_list = "../geonames/countryInfo.txt";
-	$contents = file_get_contents($country_list) or exit("Kunne ikke hente fil... $country_list");
-	$data = explode("\n", $contents);
-	
-	$language_list = "../geonames/lang.csv";
-	$languages_file = file_get_contents($language_list) or exit("Kunne ikke hente fil... $language_list");
-	$language_lines = explode("\n", $languages_file);
-	// Gjør om språk-kodene til et array med koden som nøkkel og navnet på språket som verdi
-	$languages = array();
-	foreach ($language_lines as $language_line) 
-	{
-	  	list($key, $value) = explode("\t", $language_line);
-	  	$languages[$key] = $value;
-	}
-	
-	foreach ($data as $line)
-	{
-		$countryInfo = explode("\t", $line);
-		
-		if (strtolower($countryInfo[0])==strtolower($countryCode))
-		{
-			// Språk-kodene ligger i kolonne 15
-			$lang_as_string = $countryInfo[15];
-			$langs = explode(",", $lang_as_string);
-			foreach ($langs as $lang) 
-			{
-				// Varianter av feks engelsk angis som en-NZ, vi er bare interessert i de to første tegnene
-				$lang = substr($lang, 0, 2);
-				// Sjekk om dette er et språk vi kjenner til
-				if ($languages[$lang]) 
-				{
-				  $language_names[$languages[$lang]]++;
-				} 
-				// Skriver bare ut de språkene vi finner i lista vår. 
-				// Andre språk, feks de som har en kode på 3 tegn, er det liten 
-				// sjanse for at vi finner noen språkkurs/lærebøker for. 
-				// else 
-				// {
-				//   $language_names[] = "Ukjent språk ($lang)";	
-				// }
-			}	
-			return array_keys($language_names);
-		}
-	}
-	
-	return -1;
-}
-
-/*Funksjon som antar at argumentet er navnet på et land, og forsøke
-å finne navnet på hovedstaden basert på dette
-*/
-function getCapital($country) {
-
-	$country_list = "../geonames/countryInfo.txt";
-	$contents = file_get_contents($country_list) or exit("Kunne ikke hente fil... $country_list");
-	
-	$data = explode("\n", $contents);
-	
-	foreach ($data as $line)
-	{
-		$countryInfo = explode("\t", $line);
-		
-		if (strtolower($countryInfo[4])==strtolower($country))
-		{
-			return $countryInfo[5];
-		}
-	}
-	
-	return -1;
-
-	
-}
-
-/*
-funksjon som returnerer lokal tid for valgt tidssone $timeZone
-*/
-function getLocalTime($timeZone)
-{
-	//oversettelsestabell fra engelske forkortede ukedager til norske
-	$days = array("Mon" => "Mandag",
-					"Tue" => "Tirsdag",
-					"Wed" => "Onsdag",
-					"Thu" => "Torsdag",
-					"Fri" => "Fredag",
-					"Sat" => "Lørdag",
-					"Sun" => "Søndag");
-
-	////oversettelsestabell fra engelske månedsnavn til norske
-	$months = array("January" => "Januar",
-						"February" => "Februar",
-						"March" => "Mars",
-						"April" => "April",
-						"May" => "Mai",
-						"June" => "Juni",
-						"July" => "Juli",
-						"August" => "August",
-						"September" => "September",
-						"October" => "Oktober",
-						"November" => "November",
-						"December" => "Desember");
-						
-	//forteller PHP hvilken tidssone man ønsker tid for
-	date_default_timezone_set($timeZone);
-	//lagrer ukedag, måned, dag og tid
-	$weekday = date("D");
-	$month= date("F");
-	$day = date("j");
-	$time = date("G:i T");
-	
-	//returnerer tiden i formatet dag nr. måned TT:MM tidssone
-	return "$days[$weekday] $day. $months[$month] $time";
-}
-
 
 ?>
