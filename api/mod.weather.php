@@ -30,7 +30,7 @@ for å bestemme om det er natt eller dag
 function getWeather($lat, $lon, $timeZone)
 {
 	//stammen i URL'en der symbolene befinner seg
-	$symbolPath = "http://frigg.hiof.no/h09d08/images/symbols/";
+	$symbolPath = "images/symbols/";
 
 	/*
 	arrayer som forteller hvilket symbol som tilsvarer hvilket i
