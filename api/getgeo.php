@@ -26,11 +26,12 @@ if (!empty($_GET['place'])) {
 	// Array for å samle opp landene vi finner
 	$data      = '';
 	$sted_data = '';
-
-	$place = urlencode($_GET['place']);
+	
+	$place = $_GET['place'];
+	// echo("<p>$place</p>");
 	
 	// Se etter et land først
-	$sted_data = json_decode(file_get_contents("http://ws.geonames.org/search?name=$place&maxRows=10&featureCode=PCLI&lang=nb&style=MEDIUM&type=json"));
+	$sted_data = json_decode(file_get_contents("http://ws.geonames.org/search?name=$place&maxRows=10&featureCode=PCLI&featureCode=PCLD&lang=nb&style=MEDIUM&type=json"));
  
 	if ($sted_data->totalResultsCount == 0) {
 	

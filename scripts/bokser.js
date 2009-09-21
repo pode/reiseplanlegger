@@ -68,7 +68,7 @@ $(function(){
     	var lat = place.lat;
 		var lon = place.lng;
     	
-    	if (place.fcode == 'PCLI') {
+    	if (place.fcode == 'PCLI' || place.fcode == 'PCLD') {
     		// Vi har et land
 	    	$("#place").find(".widget-content").append("<h3>" + place.name + "</h3>");
 	    	$("#place").find(".widget-content").append("<p>Hovedstad: " + place.placeInfo.capital + "</p>");
