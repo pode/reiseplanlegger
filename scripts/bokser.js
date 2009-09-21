@@ -43,13 +43,13 @@ $(function(){
   // Hent nødvendige geodata fra serveren
   // Ved suksess vil getgeo.php returnere et array som inneholder et element "result" som vil 
   // være antallet treff. Vi bruker dette for å bestemme videre gang i skriptet
-  $.getJSON("api/getgeo.php", { geoId: geoId, place: place }, function(json){
+  $.getJSON("api/getgeo-ws.php", { geoId: geoId, place: place }, function(json){
     
    
     // Fjern inneholdet i boksen som viser sted/tid
     $("#place").find(".widget-content").text("");
     
-    if (json.result == 0) {
+    if (json == 0) {
         
         // INGEN TREFF, skriver ut en feilmelding
         
@@ -57,76 +57,96 @@ $(function(){
     
         // TODO: Kunne man fått til å foreslå alternative skrivemåter? 
     
-    } else if (json.result == 1) {
+    } else if (json.length == 1) {
     	
     	// ETT TREFF - lager bokser med info om stedet/landet
     	
-    	// Her har vi sted og land på engelsk
-    	var place_country = json.placeInfo.place + ", " + json.placeInfo.country;
-    	// Oversett sted og land til norsk, og skriv ut info på siden
-    	google.language.translate(place_country, "en", "no", function(result) {
-		  if (!result.error) {
-		    $("#place").find(".widget-content").append("<h3>" + result.translation + "</h3><p>Lokal tid: " + json.localTime + ".</p>");
-		    
-		    var langs = '';
-		    // $("#place").find(".widget-content").append("<p>Velg språk:</p><ul id=\"lang-list\"></ul>");
-		    jQuery.each($(json.placeInfo.lang), function() {
-			  // $("#place").find("#lang-list").append("<li>" + this + "</li>");
-			  langs = langs + this + ",";
-		    });
-		    // $("#place").find(".widget-content").append("</ul>");
-		    
-		    // Hent ut navn på sted og land, på norsk
-			var split = result.translation.split(", "); 
-			var place_nor = split[0];
-			var country_nor = split[1];
-	        
-	    	// Gjør widgetene synlige
-	    	$(".widget").css({'visibility' : 'visible'});
-	    	  
-	    	// Gå igjennom alle widgetene og legg til innhold
-			jQuery.each($(".widget"), function() {
-			  var this_widget = this;
-			  target = this_widget.id.replace(/widget_/g, "");
-					
-			  // Vi sender den samme informasjonen til modulene, uavhengig av hva de skal gjøre for noe. 
-			  // På denne måten slipper vi å vite noe om hver enkelt modul før vi kaller dem opp. 
-			  $.get("api/index.php", { mod: target, 
-			                           lat: json.placeInfo.lat, 
-			                           lon: json.placeInfo.lon, 
-			                           place: place_nor, 
-			                           country: country_nor, 
-			                           langs: langs, 
-			                           q: getQueryVariable('place'),
-			                           bib: getQueryVariable('bib')
-			                          },
-			    function(data){
-			      $("#" + this_widget.id).find(".widget-content").text("");
-			      $("#" + this_widget.id).find(".widget-content").append(data);
-			      // Sørg for å aktivere eventuelle trekkspill
-			  	  $(".trekkspill").accordion({ autoHeight: false, active: false });
-			    });
-			
-			  });
-		    
-		  }
-		});
+    	// Vi vil bare ha data fra det første og eneste stedet
+    	var place = json[0];
     	
+    	// Hent ut koordinater
+    	var lat = place.lat;
+		var lon = place.lng;
+    	
+    	if (place.fcode == 'PCLI') {
+    		// Vi har et land
+	    	$("#place").find(".widget-content").append("<h3>" + place.name + "</h3>");
+	    	$("#place").find(".widget-content").append("<p>Hovedstad: " + place.placeInfo.capital + "</p>");
+	    	$("#place").find(".widget-content").append("<p>Befolkning: " + addCommas(place.placeInfo.population) + "</p>"); 
+	    	$("#place").find(".widget-content").append("<p>Valuta: " + addCommas(place.placeInfo.currencyCode) + "</p>"); 
+	    	// Sett koordinatene til hovedstadens koordinater
+	    	lat = place.placeInfo.capital_long.lat
+	    	lon = place.placeInfo.capital_long.lng
+    	} else {
+    		// Vi har et sted	
+	    	$("#place").find(".widget-content").append("<h3>" + place.name + ", " + place.countryName + "</h3>");
+	    	$("#place").find(".widget-content").append("<p>Befolkning: " + addCommas(place.population) + "</p>"); 
+	    	$("#place").find(".widget-content").append("<p>Valuta: " + addCommas(place.placeInfo.currencyCode) + "</p>"); 
+    	}
+    	
+	    // Lag en liste med navn på språkene
+	    var langs = '';
+	    jQuery.each($(place.placeInfo.languages_long), function() {
+		  langs = langs + this + ",";
+	    });
+	    
+	   	// Gjør widgetene synlige
+    	$(".widget").css({'visibility' : 'visible'});
+    	  
+    	// Gå igjennom alle widgetene og legg til innhold
+		jQuery.each($(".widget"), function() {
+		  var this_widget = this;
+		  target = this_widget.id.replace(/widget_/g, "");
+				
+		  // Vi sender den samme informasjonen til modulene, uavhengig av hva de skal gjøre for noe. 
+		  // På denne måten slipper vi å vite noe om hver enkelt modul før vi kaller dem opp. 
+		  $.get("api/index.php", { mod: target, 
+		                           lat: lat, 
+		                           lon: lon, 
+		                           place: place.name, 
+		                           country: place.countryName, 
+		                           langs: langs, 
+		                           q: getQueryVariable('place'),
+		                           bib: getQueryVariable('bib')
+		                          },
+		    function(data){
+		      $("#" + this_widget.id).find(".widget-content").text("");
+		      $("#" + this_widget.id).find(".widget-content").append(data);
+		      // Sørg for å aktivere eventuelle trekkspill
+		  	  $(".trekkspill").accordion({ autoHeight: false, active: false });
+		    });
+		
+		  });
+		    
     } else {
     	
     	// FLERE TREFF - vis liste med mulighet for å velge hvilket sted som var ment
     	
     	$("#place").find(".widget-content").append('<h3>Velg sted</h3>');
-    	var sort_order_type = "&sortBy=" + getQueryVariable('sortBy') + "&order=" + getQueryVariable('order') + "&bib=" + getQueryVariable('bib');
-    	jQuery.each(json.links, function() {
+    	var place = "place="  + getQueryVariable('place');
+    	var sort  = "&sortBy=" + getQueryVariable('sortBy');
+    	var order = "&order="  + getQueryVariable('order');
+    	var bib   = "&bib="    + getQueryVariable('bib');
+    	jQuery.each(json, function() {
+
+			var name  = this.name;
+			var cname = this.countryName;
+    		var geoId = "&geoId="  + this.geonameId;
+    		var adminname = '';
+    		if (this.adminName1) {
+    			adminname = ", " + this.adminName1;
+    		}
     		
-    		var this_place = this;
+    		placename = '';
+    		if (this.fcode == 'PCLI') {
+    			// Land
+    			placename = this.countryName;
+    		} else {
+    			// Sted
+    			placename = name + adminname + ", " + cname;
+    		}
     		
-	    	google.language.translate(this_place.place, "en", "no", function(result) {
-			  if (!result.error) {
-			    $("#place").find(".widget-content").append('<p><a href="?' + this_place.url + sort_order_type + '">' + result.translation + '</a></p>');
-			  }
-			});	
+		    $("#place").find(".widget-content").append('<p><a href="?' + place + geoId + sort + order + bib + '">' + placename + '</a></p>');
     		
          });
 
@@ -136,6 +156,20 @@ $(function(){
 });
 
 }
+
+// From: http://www.mredkj.com/javascript/nfbasic.html
+function addCommas(nStr) {
+	nStr += '';
+	x = nStr.split('.');
+	x1 = x[0];
+	x2 = x.length > 1 ? '.' + x[1] : '';
+	var rgx = /(\d+)(\d{3})/;
+	while (rgx.test(x1)) {
+		x1 = x1.replace(rgx, '$1' + '.' + '$2');
+	}
+	return x1 + x2;
+}
+
 
 // From: http://www.webdeveloper.com/forum/showthread.php?t=166692
 function getQueryVariable(variable)

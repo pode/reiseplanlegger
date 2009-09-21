@@ -6,28 +6,30 @@
 	http://www.geonames.org/export/geonames-search.html
 	featureClass og featureCode hentes herfra:
 	http://www.geonames.org/export/codes.html
-	featureClass er pÂ en bokstav, feks A for "country, state, region,..."
-	featuteCode er pÂ flere bokstaver
-	Merk av s¯kebegrepet kan angis som parameterne q, name eller name_equals, 
-	avhengig av hvor spesifik man vil vÊre. 
+	featureClass er p√• √©n bokstav, feks A for "country, state, region,..."
+	featuteCode er p√• flere bokstaver
+	Merk av s√∏kebegrepet kan angis som parameterne q, name eller name_equals, 
+	avhengig av hvor spesifik man vil v√¶re. 
 	
 - Dokumetasjon av countryInfo-APIet: 
 	http://www.geonames.org/export/web-services.html#countryInfo
 
-- Har ikke klart Â finne et API der geoId kan brukes som parameter
+Dette skriptet kan kalles opp med debug=1 som parameter, feks slik 
+getgeo-ws.php?place=london&debug=1
+Da dumpes all stedsinformasjon ut i lesbar form med print_r().
 
 */
 
 //geoId er ikke satt, place er satt
 if (!empty($_GET['place'])) {
 
-	// Array for Â samle opp landene vi finner
+	// Array for √• samle opp landene vi finner
 	$data      = '';
 	$sted_data = '';
 
 	$place = urlencode($_GET['place']);
 	
-	// Se etter et land f¯rst
+	// Se etter et land f√∏rst
 	$sted_data = json_decode(file_get_contents("http://ws.geonames.org/search?name=$place&maxRows=10&featureCode=PCLI&lang=nb&style=MEDIUM&type=json"));
  
 	if ($sted_data->totalResultsCount == 0) {
@@ -37,39 +39,44 @@ if (!empty($_GET['place'])) {
 	
 	}
 	
-	// Har vi noe sted nÂ? I sÂ fall beriker vi stedet med mere info
+	// Har vi noe sted n√•? I s√• fall beriker vi stedet med mere info
 	if ($sted_data->totalResultsCount > 0) {
 	
 		foreach ($sted_data->geonames as $sted) {
 		
-			// Sjekk om geoId er satt - i sÂ fall skal vi bare ha ett av de stedne vi har funnet
-			// Dersom geoId ikke er lik geonameId for dette stedet gÂr vi videre til neste
+			// Sjekk om geoId er satt - i s√• fall skal vi bare ha ett av de stedne vi har funnet
+			// Dersom geoId ikke er lik geonameId for dette stedet g√•r vi videre til neste
 			if(!empty($_GET['geoId']) && ($_GET['geoId'] != $sted->geonameId)) {
 				continue;
 			} 
 		
-			$landekode = $sted->countryCode;
+			// Vi trenger bare √• berike med mere data dersom vi har ett treff
+			if (!empty($_GET['geoId']) or $sted_data->totalResultsCount == 1) {
+				
+				$landekode = $sted->countryCode;
+			
+				// Hent mer info om landet
+				$landedata = json_decode(file_get_contents("http://ws.geonames.org/countryInfo?country=$landekode&lang=nb&type=json"));
 		
-			// Hent mer info om landet
-			$landedata = json_decode(file_get_contents("http://ws.geonames.org/countryInfo?country=$landekode&lang=nb&type=json"));
-	
-			// Hent ut landedataene ($landedata->geonames[0]) og lagre dem som placeInfo i $land
-			$sted->placeInfo = $landedata->geonames[0];
-			
-			// Utvid sprÂk til fulle sprÂknavn og lagre dem som et array i placeInfo->languages_long for dette landet
-			$langs = explode(',', $sted->placeInfo->languages);
-			foreach ($langs as $lang) {
-				if ($langlang = get_lang($lang)) {
-					$sted->placeInfo->languages_long[] = $langlang;
+				// Hent ut landedataene ($landedata->geonames[0]) og lagre dem som placeInfo i $land
+				$sted->placeInfo = $landedata->geonames[0];
+				
+				// Utvid spr√•k til fulle spr√•knavn og lagre dem som et array i placeInfo->languages_long for dette landet
+				$langs = explode(',', $sted->placeInfo->languages);
+				foreach ($langs as $lang) {
+					if ($langlang = get_lang($lang)) {
+						$sted->placeInfo->languages_long[] = $langlang;
+					}
 				}
-			}
-			
-			// Hent info om hovedstad
-			$hovedstad = $sted->placeInfo->capital;
-			$hovedstad_data = json_decode(file_get_contents("http://ws.geonames.org/search?q=$hovedstad&maxRows=1&featureCode=PPLC&lang=nb&type=json&style=MEDIUM"));
-			// Sjekk at vi fikk akkurat ett treff
-			if ($hovedstad_data->totalResultsCount == 1) {
-				$sted->placeInfo->capital_long = $hovedstad_data->geonames[0];
+				
+				// Hent info om hovedstad
+				$hovedstad = $sted->placeInfo->capital;
+				$hovedstad_data = json_decode(file_get_contents("http://ws.geonames.org/search?q=$hovedstad&maxRows=1&featureCode=PPLC&lang=nb&type=json&style=MEDIUM"));
+				// Sjekk at vi fikk akkurat ett treff
+				if ($hovedstad_data->totalResultsCount == 1) {
+					$sted->placeInfo->capital_long = $hovedstad_data->geonames[0];
+				}
+
 			}
 			
 			// Legg til dette landet i arrayet
@@ -129,7 +136,7 @@ http://ws.geonames.org/search?name=g%C3%B6teborg&maxRows=10&featureClass=P&lang=
 "Fredag 18. September 14:49 CEST",
 "debug":"place=frankrike"}
 
-?place=k¯benhavn
+?place=k√∏benhavn
 
 {
 "result":1,
@@ -223,13 +230,13 @@ $lang = array(
 	'ff' => 'Fulfulde',
 	'fi' => 'Finsk',
 	'fj' => 'Fijisk',
-	'fo' => 'FÊr¯ysk',
+	'fo' => 'F√¶r√∏ysk',
 	'fr' => 'Fransk',
 	'fy' => 'Frisisk',
 	'ga' => 'Irsk',
-	'gd' => 'Skotsk gÊlisk',
+	'gd' => 'Skotsk g√¶lisk',
 	'gl' => 'Galisisk',
-	'gn' => 'GuaranÌ',
+	'gn' => 'Guaran√≠',
 	'gu' => 'Gujarati',
 	'gv' => 'Mansk',
 	'ha' => 'Hausa',
@@ -289,14 +296,14 @@ $lang = array(
 	'mt' => 'Maltesisk',
 	'my' => 'Burmesisk',
 	'na' => 'Naurisk',
-	'nb' => 'BokmÂl',
+	'nb' => 'Bokm√•l',
 	'nd' => 'Nord-ndebele',
 	'ne' => 'Nepali',
 	'ng' => 'Ndonga',
 	'nl' => 'Nederlandsk',
 	'nn' => 'Nynorsk',
 	'no' => 'Norsk',
-	'nr' => 'S¯r-ndebele',
+	'nr' => 'S√∏r-ndebele',
 	'nv' => 'Navajo',
 	'ny' => 'Chichewa',
 	'oc' => 'Oksitansk',
@@ -354,7 +361,7 @@ $lang = array(
 	'uz' => 'Usbekisk',
 	've' => 'Venda',
 	'vi' => 'Vietnamesisk',
-	'vo' => 'Volap¸k',
+	'vo' => 'Volap√ºk',
 	'wa' => 'Vallonsk',
 	'wo' => 'Wolof',
 	'xh' => 'Xhosa',
@@ -364,6 +371,9 @@ $lang = array(
 	'zh' => 'Kinesisk',
 	'zu' => 'Zulu'
 );
+
+	// Vi skal bare ha de to f√∏rste tegnene
+	$kode = substr($kode, 0, 2);
 
 	if ($lang[$kode]) {
 		return $lang[$kode];
