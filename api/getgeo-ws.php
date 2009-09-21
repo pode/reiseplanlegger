@@ -183,6 +183,8 @@ if (empty($_GET['geoId']) && isset($_GET['place'])) {
 
 function get_lang($kode) {
 
+// Opplysningene er hentet herfra: 
+// http://no.wikipedia.org/wiki/Liste_over_ISO_639-1-koder
 $lang = array(
 	'aa' => 'Afar', 
 	'ab' => 'Abkhasisk',
