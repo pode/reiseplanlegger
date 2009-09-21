@@ -43,7 +43,7 @@ $(function(){
   // Hent nødvendige geodata fra serveren
   // Ved suksess vil getgeo.php returnere et array som inneholder et element "result" som vil 
   // være antallet treff. Vi bruker dette for å bestemme videre gang i skriptet
-  $.getJSON("api/getgeo-ws.php", { geoId: geoId, place: place }, function(json){
+  $.getJSON("api/getgeo.php", { geoId: geoId, place: place }, function(json){
     
    
     // Fjern inneholdet i boksen som viser sted/tid
