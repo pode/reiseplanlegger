@@ -107,6 +107,12 @@ $config['modules']['food'] = array(
   'limit' => 5, 
 );
 
+$config['modules']['culture'] = array(
+  'enabled' => true,
+  'title' => "Kulturhistorie",  
+  'limit' => 5, 
+);
+
 $config['modules']['snl'] = array(
   'enabled' => true, 
   'title' => "Store norske leksikon", 
