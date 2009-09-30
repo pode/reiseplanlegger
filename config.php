@@ -101,6 +101,12 @@ $config['modules']['stories'] = array(
   'limit' => 5, 
 );
 
+$config['modules']['food'] = array(
+  'enabled' => true,
+  'title' => "Mat og matlaging",  
+  'limit' => 5, 
+);
+
 $config['modules']['snl'] = array(
   'enabled' => true, 
   'title' => "Store norske leksikon", 
