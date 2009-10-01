@@ -368,13 +368,9 @@ function get_type($bib) {
 	}
 }
 
-function get_ccl_results_as_xml($ccl) {
+function get_ccl_results_as_xml($ccl, $limit) {
 
-	/*
-	henter funksjonene i catalog.php, catalog.php inneholder
-	funksjoner for å hente ut katalogdata fra z39.50-servere
-	*/
-	require_once 'include/catalog.php';
+
 	
 	$out = '';
 	
@@ -400,7 +396,7 @@ function get_ccl_results_as_xml($ccl) {
 		MARCXML-data basert på $query. syntaksen er 'normarc'. mot
 		deichmanske kan denne byttes til hvertfall USMARC og MARC21
 		*/
-		$fetch = yazCclArray($ccl, 'normarc');
+		$fetch = yazCclArray($ccl, 'normarc', $limit);
 		/*
 		henter ut verdien med nøkkelen 'result'. det er her selve
 		dataene ligger lagret. $fetch-arrayen har også en verdi med
@@ -426,8 +422,6 @@ function get_ccl_results_as_xml($ccl) {
 		}
 		$out .= "</records>";
 	}
-	
-	// DEBUG echo($out);
 	
 	return $out;
 	

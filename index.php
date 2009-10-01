@@ -32,6 +32,7 @@ error_reporting(E_ALL|E_STRICT);
 require_once('config.php');
 
 //inkluderer funksjoner
+require_once 'include/catalog.php';
 require_once 'include/functions.php';
 
 //lagrer antall sekunder siden 1. januar 1970
@@ -245,7 +246,7 @@ else if (isset($_GET['place']))
 
 			//oppretter DOM-dok med XML-data
 			$xml = new DOMDocument;
-			$xml->loadXML(get_ccl_results_as_xml($ccl));
+			$xml->loadXML(get_ccl_results_as_xml($ccl, $config['main_limit']));
 
 			//teller antallet <record>-noder (antall søketreff)
 			$nodeList = $xml->getElementsByTagName('record');

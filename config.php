@@ -1,7 +1,10 @@
 <?php
 
 // Setter navnet på applikasjonen
-$config = array('app_title' => 'Reiseplanlegger');
+$config['app_title'] = 'Reiseplanlegger';
+
+// Hvor mange treff skal vises i selve reisehåndboksøket? 
+$config['main_limit'] = 25;
 
 /*
 BIBLIOTEK
