@@ -10,6 +10,7 @@
 <xsl:param name="querystring"/>
 <xsl:param name="page"/>
 <xsl:param name="perPage"/>
+<xsl:param name="limit"/>
 <xsl:output method="html"/>
 
 <xsl:include href="felles.xsl"/>
@@ -18,8 +19,16 @@
 	
 	<!-- ANTALL TREFF -->
 	<xsl:variable name="hits">
-		<xsl:value-of select="//zs:numberOfRecords"/>
+		<xsl:choose>
+			<xsl:when test="number(//zs:numberOfRecords) &lt;= $limit">
+				<xsl:value-of select="number(//zs:numberOfRecords)"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$limit"/>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:variable>
+	
 	<xsl:choose>
 		<!-- Vis altid 0 treff -->
 		<xsl:when test="$hits=0">
@@ -33,6 +42,7 @@
 		</xsl:otherwise>
 	</xsl:choose>
 	
+	<!-- Variabler for første og siste post som skal vises -->
 	<xsl:variable name="first"><xsl:value-of select="(($page - 1) * $perPage) + 1"/></xsl:variable>
 	<xsl:variable name="last">
 		<xsl:choose>
@@ -47,8 +57,9 @@
 	
 	<xsl:choose>
 		<xsl:when test="$target='local'">
-			<!-- Viste poster -->
+			<!-- "Viser treff x - y av z" -->
 			<p>Viser treff <xsl:value-of select="$first"/> - <xsl:value-of select="$last"/> av <xsl:value-of select="$hits"/></p>
+			<!-- Navigasjon neste/forrige side -->
 			<p>
 				<xsl:choose>
 					<xsl:when test="$page=1">Forrige side</xsl:when>
@@ -64,7 +75,7 @@
 				</xsl:choose>
 				<xsl:text> | </xsl:text>
 				<xsl:choose>
-					<xsl:when test="(($page + 1) * $perPage) &gt; $hits + 10">Neste side</xsl:when>
+					<xsl:when test="(($page + 1) * $perPage) &gt; $hits + $perPage">Neste side</xsl:when>
 					<xsl:otherwise>
 					<a>
 					<xsl:attribute name="href">?

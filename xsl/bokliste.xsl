@@ -7,12 +7,64 @@
 <xsl:param name="target"/>
 <xsl:param name="showHits"/>
 <xsl:param name="visForfatter"/>
+<xsl:param name="hits"/>
+<xsl:param name="querystring"/>
+<xsl:param name="page"/>
+<xsl:param name="perPage"/>
 <xsl:output method="html"/>
 
 <xsl:include href="felles.xsl"/>
 
 <xsl:template match="/">
-	
+
+	<!-- Variabler for første og siste post som skal vises -->
+	<xsl:variable name="first"><xsl:value-of select="(($page - 1) * $perPage) + 1"/></xsl:variable>
+	<xsl:variable name="last">
+		<xsl:choose>
+			<xsl:when test="($page * $perPage) &gt; $hits">
+				<xsl:value-of select="$hits"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$page * $perPage"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:variable>
+
+	<xsl:choose>
+		<xsl:when test="$target='local'">
+			<!-- "Viser treff x - y av z" -->
+			<p>Viser treff <xsl:value-of select="$first"/> - <xsl:value-of select="$last"/> av <xsl:value-of select="$hits"/></p>
+			<!-- Navigasjon neste/forrige side -->
+			<p>
+				<xsl:choose>
+					<xsl:when test="$page=1">Forrige side</xsl:when>
+					<xsl:otherwise>
+						<a>
+						<xsl:attribute name="href">?
+							<xsl:value-of select="substring-before($querystring, 'ZZZ')"/>
+							<xsl:value-of select="$page - 1"/>
+							<xsl:value-of select="substring-after($querystring, 'ZZZ')"/>
+						</xsl:attribute>
+						Forrige side</a>
+					</xsl:otherwise>
+				</xsl:choose>
+				<xsl:text> | </xsl:text>
+				<xsl:choose>
+					<xsl:when test="(($page + 1) * $perPage) &gt; $hits + $perPage">Neste side</xsl:when>
+					<xsl:otherwise>
+					<a>
+					<xsl:attribute name="href">?
+						<xsl:value-of select="substring-before($querystring, 'ZZZ')"/>
+						<xsl:value-of select="$page + 1"/>
+						<xsl:value-of select="substring-after($querystring, 'ZZZ')"/>
+					</xsl:attribute>
+					Neste side</a>
+					</xsl:otherwise>
+				</xsl:choose>
+			</p>
+		</xsl:when>
+	</xsl:choose>
+
 	<xsl:choose>
 		<xsl:when test="$sortBy='title'">
 			<xsl:apply-templates select="//record">
@@ -20,12 +72,16 @@
 				<xsl:sort select="datafield[@tag=245]/subfield[@code='a']" data-type="text" order="{$order}"/>
 				<xsl:sort select="datafield[@tag=245]/subfield[@code='b']" data-type="text" order="{$order}"/>
 				<xsl:sort select="translate(datafield[@tag=260]/subfield[@code='c'], 'cop.[]', '')" data-type="number" order="descending"/>
+				<xsl:with-param name="first" select="$first"/>
+				<xsl:with-param name="last" select="$last"/>
 			</xsl:apply-templates>
 		</xsl:when>
 		<xsl:otherwise>
 			<xsl:apply-templates select="//record">
 				<!-- Sorter etter år, etter at "cop." og "[]" er fjernet. -->
 				<xsl:sort select="translate(datafield[@tag=260]/subfield[@code='c'], 'cop.[]', '')" data-type="number" order="{$order}"/>
+				<xsl:with-param name="first" select="$first"/>
+				<xsl:with-param name="last" select="$last"/>
 			</xsl:apply-templates>
 		</xsl:otherwise>
 	</xsl:choose>
@@ -34,11 +90,15 @@
 
 <xsl:template match="//record"> 
 
+	<xsl:param name="first"/>
+	<xsl:param name="last"/>
+
 	<xsl:variable name="rec" select="."/>
 	<!-- Lagrer tittelnr -->
 	<xsl:variable name="tittelnr">
 		<xsl:value-of select="$rec/controlfield[@tag=001]"/>
 	</xsl:variable>
+	
 	<xsl:choose>
 		<xsl:when test="$target='remote'">
 			<div class="trekkspill">
@@ -49,10 +109,13 @@
 			</div>
 		</xsl:when>
 		<xsl:otherwise>
-			<xsl:call-template name="intern-lenke">
-				<xsl:with-param name="rec" select="$rec"/>
-				<xsl:with-param name="tittelnr" select="$tittelnr"/>
-			</xsl:call-template>
+			<!-- Vis bare de postene som er innenfor det intervallet vi skal se -->
+			<xsl:if test="position() &gt;= $first and position() &lt;= $last">
+				<xsl:call-template name="intern-lenke">
+					<xsl:with-param name="rec" select="$rec"/>
+					<xsl:with-param name="tittelnr" select="$tittelnr"/>
+				</xsl:call-template>
+			</xsl:if>
 		</xsl:otherwise>
 	</xsl:choose>
 

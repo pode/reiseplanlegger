@@ -259,11 +259,17 @@ else if (isset($_GET['place']))
 			//treff, XML blir transformert og skrevet ut
 			else
 			{
-				echo "<p>Antall treff: $hits</p>\n";
+				
+				// Sjekk om sidetallet er satt. Hvis ikke: sett det til 1
+				$page = !empty($_GET['page']) ? $_GET['page'] : 1; 
 				
 				$params = array(array('namespace' => '', 'name' => 'url_ext', 'value' => "$geoId&place=$place&bib=".$_GET['bib']),
 							array('namespace' => '', 'name' => 'sortBy', 'value' => $sortBy),
-							array('namespace' => '', 'name' => 'order', 'value' => $order), 
+							array('namespace' => '', 'name' => 'order', 'value' => $order),
+							array('namespace' => '', 'name' => 'hits', 'value' => $hits), 
+							array('namespace' => '', 'name' => 'page', 'value' => $page), 
+							array('namespace' => '', 'name' => 'perPage', 'value' => $config['mainPerPage']),
+							array('namespace' => '', 'name' => 'querystring', 'value' => get_querystring($_SERVER['QUERY_STRING'])),
 							array('namespace' => '', 'name' => 'target', 'value' => "local"));
 		
 				echo transformToHTML($xml, $xsl_url, $params);
@@ -276,6 +282,7 @@ else if (isset($_GET['place']))
 			$cql = getCql($place, "dewey/dewey_list.txt");
 			//oppretter URL til KOHA med cql
 			$xml_url = getSRUURL($cql);
+
 			//sti til XSL
 			$xsl_url = 'xsl/boklistesru.xsl';
 
@@ -300,7 +307,8 @@ else if (isset($_GET['place']))
 							array('namespace' => '', 'name' => 'sortBy', 'value' => $sortBy),
 							array('namespace' => '', 'name' => 'order', 'value' => $order), 
 							array('namespace' => '', 'name' => 'page', 'value' => $page), 
-							array('namespace' => '', 'name' => 'perPage', 'value' => $config['mainPerPage']), 
+							array('namespace' => '', 'name' => 'perPage', 'value' => $config['mainPerPage']),
+							array('namespace' => '', 'name' => 'limit', 'value' => $config['main_limit']),  
 							array('namespace' => '', 'name' => 'querystring', 'value' => get_querystring($_SERVER['QUERY_STRING'])),
 							array('namespace' => '', 'name' => 'target', 'value' => "local"));
 		
@@ -410,7 +418,7 @@ function get_querystring($q) {
 	
 	if (substr_count($q, 'page=') == 0) {
 		// querystring inneholder ikke noe page-attributt fra før, så vi legger til et
-		return $q . '&page=ZZZ';
+		return 'page=ZZZ&' . $q;
 	} else {
 		// querystring inneholder et page attributt, vi bytter ut tallet med ZZZ
 		return preg_replace('/page=\d{1,}/i', 'page=ZZZ', $q);

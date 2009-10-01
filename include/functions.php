@@ -594,18 +594,16 @@ function getCqlDewey($query, $path)
 /*
 tar string med en query og lager en SRU-link
 */
-function getSRUURL($query,
-                $startRecord = "1",
-                $maximumRecords = "1000",
-                $operation = "searchRetrieve",
-                $version = "1.2",
-                $recordSchema = "marcxml")
-{
+function getSRUURL($query, $startRecord = 1, $maximumRecords = 10000, $operation = "searchRetrieve", $version = "1.2", $recordSchema = "marcxml") {
 	
 	global $config;
 	
+	if ($maximumRecords > $config['main_limit']) {
+		$maximumRecords = $config['main_limit'];
+	}
+	
 	$query = urlencode($query);
-        return "{$config['libraries'][$_GET['bib']]['sru']}?operation=$operation&version=$version&query=$query&recordSchema=$recordSchema&startRecord=$startRecord&maximumRecords=$maximumRecords";
+	return "{$config['libraries'][$_GET['bib']]['sru']}?operation=$operation&version=$version&query=$query&recordSchema=$recordSchema&startRecord=$startRecord&maximumRecords=$maximumRecords";
 }
 
 /*
