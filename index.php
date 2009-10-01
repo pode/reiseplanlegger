@@ -32,7 +32,6 @@ error_reporting(E_ALL|E_STRICT);
 require_once('config.php');
 
 //inkluderer funksjoner
-require_once 'include/catalog.php';
 require_once 'include/functions.php';
 
 //lagrer antall sekunder siden 1. januar 1970

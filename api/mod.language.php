@@ -7,7 +7,6 @@ if (!$config['modules']['language']['enabled']) {
 }
 
 include_once('../include/functions.php');
-include_once('inc.catalogue.php');
 
 /*
 Henter ut språkkurs og lærebøker fra katalogen

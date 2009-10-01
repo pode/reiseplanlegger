@@ -1,6 +1,9 @@
 <?php
 
 include_once('../config.php');
+if (!$config['modules']['snl']['enabled']) {
+  exit;
+}
 include_once('../include/functions.php');
 
 /*

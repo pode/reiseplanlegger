@@ -7,7 +7,6 @@ if (!$config['modules']['travel']['enabled']) {
 }
 
 include_once('../include/functions.php');
-include_once('inc.catalogue.php');
 
 /*
 Henter ut reiseskildringer fra katalogen, basert på land
