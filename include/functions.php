@@ -627,7 +627,7 @@ function transformToHTML($xml_data, $xsl_path, $params)
 
 	//oppretter DOM-dokument og laster inn XSL-data
 	$xsl = new DOMDocument;
-	$xsl->load($xsl_path);
+	$xsl->load($xsl_path, LIBXML_NOCDATA);
 
 	//konfigurerer omformer
 	$proc = new XSLTProcessor;

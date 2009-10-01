@@ -292,10 +292,16 @@ else if (isset($_GET['place']))
 			$nodeList = $xml->getElementsByTagName('recordData');
 			$hits = $nodeList->length;
 			
+			// Sjekk om sidetallet er satt. Hvis ikke: sett det til 1
+			$page = !empty($_GET['page']) ? $_GET['page'] : 1; 
+			
 			//parametere til XSL
 			$params = array(array('namespace' => '', 'name' => 'url_ext', 'value' => "$geoId&place=$place&bib=".$_GET['bib']),
 							array('namespace' => '', 'name' => 'sortBy', 'value' => $sortBy),
 							array('namespace' => '', 'name' => 'order', 'value' => $order), 
+							array('namespace' => '', 'name' => 'page', 'value' => $page), 
+							array('namespace' => '', 'name' => 'perPage', 'value' => $config['mainPerPage']), 
+							array('namespace' => '', 'name' => 'querystring', 'value' => get_querystring($_SERVER['QUERY_STRING'])),
 							array('namespace' => '', 'name' => 'target', 'value' => "local"));
 		
 			//transformerer til HTML
@@ -393,6 +399,24 @@ echo "\t\t\t\t\t<p>Siden lastet på $total_time sekunder. $search_time</p>\n";
 	</body>
 </html>
 <?php
+
+/*
+Lager en querystring-"mal" som vi lett kan bruke til å lage "forrige"- og "neste"-lenker i XSLT. 
+XSLTen må bytte ut ZZZ med det ønskede sidetallet. Dette forutsetter at ZZZ ikke forekommer på 
+andre steder i querystringen, men det burde vel være relativt trygt. Sikkert ikke den mest 
+elegante måten å gjøre dette på, men...
+*/
+function get_querystring($q) {
+	
+	if (substr_count($q, 'page=') == 0) {
+		// querystring inneholder ikke noe page-attributt fra før, så vi legger til et
+		return $q . '&page=ZZZ';
+	} else {
+		// querystring inneholder et page attributt, vi bytter ut tallet med ZZZ
+		return preg_replace('/page=\d{1,}/i', 'page=ZZZ', $q);
+	}
+	
+}
 
 /*
 Skriver benchmark-data til fil
