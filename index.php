@@ -44,7 +44,7 @@ $header_extras = array("<link rel=\"stylesheet\" type=\"text/css\" href=\"css/ma
 					   "<script type=\"text/javascript\" src=\"scripts/bsn.AutoSuggest_2.1.3_comp.js\" charset=\"utf-8\"></script>",
 					   "<link rel=\"stylesheet\" href=\"css/autosuggest_inquisitor.css\" type=\"text/css\" media=\"screen\" charset=\"utf-8\" />", 
 					   "<link rel=\"stylesheet\" href=\"css/jquery.easywidgets.css\" type=\"text/css\" media=\"screen\" />", 
-					   "<script src=\"http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAA4bkAB4c8qRFagE_bUojf3hS-l405Vpwg0XB2Ibm6AlGOmZ6JbhTiF85MU3mn8joSdlDb19Mam3gFSw&sensor=false\" type=\"text/javascript\"></script>", 
+					   "<script src=\"http://maps.google.com/maps?file=api&amp;v=2&amp;key={$config['modules']['map']['api_key']}&sensor=false\" type=\"text/javascript\"></script>", 
 						"<script type=\"text/javascript\" src=\"scripts/googlemaps.js\"></script>");
 						
 $header_extras[] = '<script src="http://www.google.com/jsapi"></script>

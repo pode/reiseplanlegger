@@ -129,9 +129,14 @@ $config['modules']['weather'] = array(
   'title' => "Været", 
 );
 
+/* 
+For at kart skal fungere må man ha en "Google Maps API key", dette får man her: 
+http://code.google.com/intl/en/apis/maps/
+*/
 $config['modules']['map'] = array(
   'enabled' => true, 
   'title' => "Kart", 
+  'api_key' => 'ABQIAAAA07LRGVOu7zpVVxMFx5WDKhQW5jmlfQKPXv2W47TqGj7X4_3eXBRrJI7o_-e5ygdKgex9uvLwjzHqRA'
 );
 
 $config['modules']['debug'] = array(
