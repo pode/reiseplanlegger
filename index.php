@@ -72,11 +72,13 @@ header('Content-Type: text/html; Extension: xhtml; charset=utf-8');
 writeHeader($config['app_title'], $header_extras);
 ?>
 		<div id="content">
+			<!--
 			<div id="menu">
-				<!-- MENYLINKER -->
 				<a class="menulinks" href=".">Hjem</a>
 				<a class="menulinks" href="?about">Om</a>
 			</div>
+			-->
+			<h1><?php echo($config['app_title']); ?></h1>
 			<div id="header">
 <?php
 
@@ -95,7 +97,7 @@ writeSearchForm($bib, $place);
 ?>
 			</div>
 			<div id="main">
-				<div id="left-col">
+				
 <?php
 $search_time = "";
 /*
@@ -119,7 +121,7 @@ if (isset($_GET['about']))
 }
 if (isset($_GET['tittelnr']))
 {
-	echo "<h3>Reisehåndbok:</h3>\n";
+	echo "<div id=\"left-col\"><h3>Reisehåndbok:</h3>\n";
 	//lagrer tittelnummer
 	$tnr = $_GET['tittelnr'];
 	//lagrer søketype (Z39.50, SRU)
@@ -171,6 +173,7 @@ if (isset($_GET['tittelnr']))
 	{
 		echo "Noe er feil...<br />\n";
 	}
+	echo("</div>");
 }
 /*
 --------------- SØKERESULTAT ---------------
@@ -178,6 +181,7 @@ place er satt, altså vil man se reisebøker for dette stedet
 */
 else if (isset($_GET['place']))
 {
+	echo('<div id="left-col">');
 	//lagrer script-variablene
 	$place = $_GET['place'];
 	$order = $_GET['order'];
@@ -326,6 +330,7 @@ else if (isset($_GET['place']))
 		$searchTime = round(($finish - $search_start), 4);
 		$search_time = "Søket tok $searchTime sekunder.";
 	}
+	echo('</div>');
 }
 /*
 --------------- SØKEORD IKKE OPPGITT ---------------
@@ -333,6 +338,7 @@ else if (isset($_GET['place']))
 else if (!isset($_GET['about']))
 {
 ?>
+					<!--
 					<h3>Velkommen til reiseplanleggeren!</h3>
 					<p>
 						Herfra kan du søke på spennende reisemål rundt om i hele verden. Da vil du
@@ -342,12 +348,12 @@ else if (!isset($_GET['about']))
 						<br />
 						God reise!<br />
 					</p>
+					-->
 <?php
 }
 
 
 ?>
-				</div>
 				<div id="right-col" class="widget-place">
 				<div class="right-col-box" id="place">
                     <div class="widget-content"><img src="images/widgets/loading.gif" alt="Henter data..." /></div>
@@ -369,7 +375,8 @@ foreach ($config['modules'] as $key => $mod) {
 
 ?>
 				</div>
-								
+				
+				<!--			
 				<div id="footer">
 					<div id="left-footer">
 <?php
@@ -385,6 +392,7 @@ echo "\t\t\t\t\t<p>Siden lastet på $total_time sekunder. $search_time</p>\n";
 					<div id="right-footer">
 					</div>
 				</div>
+				-->
 			</div>
 		</div>
 <script type="text/javascript">

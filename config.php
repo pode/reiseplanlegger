@@ -1,7 +1,7 @@
 <?php
 
 // Setter navnet på applikasjonen
-$config['app_title'] = 'Reiseplanlegger';
+$config['app_title'] = 'Podes reiseplanlegger';
 
 // Hvor mange treff skal maksimalt hentes ved søk? 
 $config['main_limit'] = 100;
@@ -140,7 +140,7 @@ $config['modules']['map'] = array(
 );
 
 $config['modules']['debug'] = array(
-  'enabled' => true, 
+  'enabled' => false, 
   'title' => "Debug", 
 );
 
