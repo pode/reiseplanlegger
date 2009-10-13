@@ -138,7 +138,7 @@ if (isset($_GET['tittelnr']))
 		$xsl_url = 'xsl/bok.xsl';
 		
 		//lagrer XML-data som streng
-		$xml_data = get_ccl_results_as_xml("tnr=$tnr") or exit("Feil");
+		$xml_data = get_ccl_results_as_xml("tnr=$tnr", $config['main_limit']) or exit("Feil");
 		
 		//lagrer array med parametere til XSLT
 		$params = array(array('namespace' => '', 'name' => 'url_ext', 'value' => '&type='.$type));
