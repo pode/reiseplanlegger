@@ -136,11 +136,11 @@ http://code.google.com/intl/en/apis/maps/
 $config['modules']['map'] = array(
   'enabled' => true, 
   'title' => "Kart", 
-  'api_key' => 'ABQIAAAA07LRGVOu7zpVVxMFx5WDKhQW5jmlfQKPXv2W47TqGj7X4_3eXBRrJI7o_-e5ygdKgex9uvLwjzHqRA'
+  'api_key' => 'Din API key limes inn her'
 );
 
 $config['modules']['debug'] = array(
-  'enabled' => false, 
+  'enabled' => true, 
   'title' => "Debug", 
 );
 
