@@ -2,7 +2,7 @@
 
 /*
 
-Copyright 2009 Pode
+Copyright 2009 ABM-utvikling
 
 This file is part of "Podes reiseplanlegger".
 
