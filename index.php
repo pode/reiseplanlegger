@@ -412,6 +412,17 @@ echo "\t\t\t\t\t<p>Siden lastet på $total_time sekunder. $search_time</p>\n";
 	var as_json = new bsn.AutoSuggest('autosuggest', options);
 //]]>
 </script>
+
+	<script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+	</script>
+	<script type="text/javascript">
+	try {
+	var pageTracker = _gat._getTracker("<?php echo($config['google_analytics']); ?>");
+	pageTracker._trackPageview();
+	} catch(err) {}</script>
+
 	</body>
 </html>
 <?php

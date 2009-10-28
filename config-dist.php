@@ -33,6 +33,18 @@ $config['main_limit'] = 100;
 $config['mainPerPage'] = 10;
 
 /*
+GOOGLE ANALYTICS
+
+Du kan bruke Google analytics for å se statistikk for bruken av denne applikasjonen. 
+Du trenger en kode for å aktivisere denne tjenesten, dette jkan du få her: 
+https://www.google.com/analytics/
+Eksempel: $config['google_analytics'] = "UA-12345678-1";
+Dersom du ikke oppgir noen kode nedenfor vil Google Analytics ikke bli aktivert. 
+*/
+
+$config['google_analytics'] = "";
+
+/*
 BIBLIOTEK
 
 Her konfigureres de bibliotekene det skal være mulig å søke i, og 
