@@ -476,13 +476,14 @@ Katalogstruktur
 Øverste nivå 
 
     
-.gitignore er en fil som benyttes av Git. Den er satt opp slik at Git ignorer fila config.php, noe som medfører at endringer her ikke vil bli plukket opp av versjonskontrollsystemet.
+ .gitignore er en fil som benyttes av Git. Den er satt opp slik at Git ignorer fila config.php, noe som medfører at endringer her ikke vil bli plukket opp av versjonskontrollsystemet.
 
 COPYING.txt inneholder GPL-lisensen i fulltekst.
 
 config-dist.php må flyttes til config.php under installasjonen, jfr avsnittet om config-dist.php.
 
 index.php er hovedfila for hele prosjektet.
+
 
 
 
@@ -533,6 +534,13 @@ mashup.css er ikke i bruk, men er beholdt av historiske årsaker.
 dewey/
 
 Her ligger et uttrekk fra katalogen som inneholder stedsnavn og tilknyttede Dewey-nummer. Dette danner grunnlaget for autosuggest-funksjonen, og ble i tidligere versjoner også brukt i forbindelse med søking. Se avsnittet om Autosuggest.
+
+docs/
+
+Her ligger dokumentasjonen til reiseplanleggeren i formatene PDF, ren tekst og HTML (pakket som en ZIP-fil).
+
+
+
 
 images/
 
