@@ -285,6 +285,10 @@ Sammen med HTML-siden sendes det en JavaScript-fil, script/bokser.js, som har ti
 
 Se kapittelet om moduler for flere detaljer om disse boksene.
 
+Skjematisk fremstilling av funksjonaliteten:
+
+
+
 Protokoller 
 Podes reiseplanlegger søker som standard i to kataloger:
 
