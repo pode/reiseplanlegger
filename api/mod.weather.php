@@ -102,7 +102,7 @@ function getWeather($lat, $lon, $timeZone)
 							19 => "19.png");
 	
 	//henter XML med varsel for gitt lengde- og breddegrad fra yr
-	$xml = simplexml_load_file("http://api.yr.no/weatherapi/locationforecast/1.7/?lat=$lat;lon=$lon");
+	$xml = simplexml_load_file("http://api.yr.no/weatherapi/locationforecast/1.8/?lat=$lat;lon=$lon");
 	
 	//henter ut hvilken time  det er basert på tidssone
 	date_default_timezone_set($timeZone);
